@@ -7,16 +7,15 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+
+@Builder
 public class Usuario implements Serializable {
     
     @Id

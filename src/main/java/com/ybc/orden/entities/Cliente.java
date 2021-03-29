@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,14 +19,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Cliente implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String nombre;
     private String apellido;
-    private String tipoDoc;
-    private long dni;
-    
+    private String nombre;        
+    private long cuit;
+    private long telefono;
+    private String direccion;
+    private String condicionIva;
+
+ @Override public String toString() {
+     
+        return nombre+" "+apellido;
+    }    
 }

@@ -7,10 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Orden implements Serializable {
@@ -27,10 +30,13 @@ public class Orden implements Serializable {
     private int id;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date entrada;
-    @OneToOne
+    private String detalle;
+    private String defectosReportados;
+    private String condicionDeIngreso;    
+    @ManyToOne
     private Cliente cliente;
     @OneToOne
-    private Usuario usuario;
+    private Usuario usuario;    
     @OneToOne
     private Equipo equipo;
     
