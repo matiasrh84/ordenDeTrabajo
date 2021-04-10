@@ -101,6 +101,10 @@
               </Border>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="panelLateralMouseDragged"/>
+            <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="panelLateralMousePressed"/>
+          </Events>
 
           <Layout>
             <DimensionLayout dim="0">
@@ -337,7 +341,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" pref="539" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" pref="784" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -366,7 +370,11 @@
                               <Color blue="ff" green="ff" red="ff" type="rgb"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="0" rowCount="0"/>
+                              <Table columnCount="3" rowCount="0">
+                                <Column editable="true" title="Fecha" type="java.lang.Object"/>
+                                <Column editable="true" title="Equipo" type="java.lang.Object"/>
+                                <Column editable="true" title="Cliente" type="java.lang.Object"/>
+                              </Table>
                             </Property>
                             <Property name="backgoundHead" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="0" green="0" red="0" type="rgb"/>
@@ -385,9 +393,6 @@
                             </Property>
                             <Property name="colorSecundaryText" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="ff" green="66" red="0" type="rgb"/>
-                            </Property>
-                            <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
                             </Property>
                             <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="ff" green="66" red="0" type="rgb"/>
@@ -457,7 +462,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnNuevoCliente" min="-2" pref="230" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="324" max="32767" attributes="0"/>
                           <Component id="btnModificarCliente" min="-2" pref="230" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -489,55 +494,68 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="0" pref="13" max="32767" attributes="0"/>
-                              <Component id="tablaClientes" min="-2" pref="536" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jScrollPane3" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="tablaClientes" pref="432" max="32767" attributes="0"/>
+                              <Component id="jScrollPane3" pref="432" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="RSMaterialComponent.RSTableMetro" name="tablaClientes">
-                      <Properties>
-                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="0" rowCount="0"/>
-                        </Property>
-                        <Property name="backgoundHead" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="0" green="0" red="0" type="rgb"/>
-                        </Property>
-                        <Property name="backgoundHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="66" red="0" type="rgb"/>
-                        </Property>
-                        <Property name="colorBorderHead" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="cc" green="cc" red="cc" type="rgb"/>
-                        </Property>
-                        <Property name="colorBorderRows" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                        <Property name="colorPrimaryText" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="66" red="0" type="rgb"/>
-                        </Property>
-                        <Property name="colorSecundaryText" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="66" red="0" type="rgb"/>
-                        </Property>
-                        <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="66" red="0" type="rgb"/>
-                        </Property>
-                      </Properties>
-                    </Component>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                      <AuxValues>
+                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                      </AuxValues>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Component class="RSMaterialComponent.RSTableMetro" name="tablaClientes">
+                          <Properties>
+                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                            </Property>
+                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                              <Table columnCount="3" rowCount="0">
+                                <Column editable="false" title="Apellido" type="java.lang.String"/>
+                                <Column editable="false" title="Nombre" type="java.lang.String"/>
+                                <Column editable="false" title="CUIT" type="java.lang.String"/>
+                              </Table>
+                            </Property>
+                            <Property name="backgoundHead" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="0" green="0" red="0" type="rgb"/>
+                            </Property>
+                            <Property name="backgoundHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="66" red="0" type="rgb"/>
+                            </Property>
+                            <Property name="colorBorderHead" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+                            </Property>
+                            <Property name="colorBorderRows" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                            </Property>
+                            <Property name="colorPrimaryText" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="66" red="0" type="rgb"/>
+                            </Property>
+                            <Property name="colorSecundaryText" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="66" red="0" type="rgb"/>
+                            </Property>
+                            <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="66" red="0" type="rgb"/>
+                            </Property>
+                          </Properties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
                   </SubComponents>
                 </Container>
                 <Component class="RSMaterialComponent.RSButtonMaterialIconOne" name="btnModificarCliente">
@@ -596,7 +614,7 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnNuevoEquipo" min="-2" pref="230" max="-2" attributes="0"/>
-                          <EmptySpace pref="79" max="32767" attributes="0"/>
+                          <EmptySpace pref="324" max="32767" attributes="0"/>
                           <Component id="btnModificarEquipo" min="-2" pref="230" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -659,7 +677,11 @@
                               <Color blue="ff" green="ff" red="ff" type="rgb"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="0" rowCount="0"/>
+                              <Table columnCount="3" rowCount="0">
+                                <Column editable="true" title="Marca" type="java.lang.Object"/>
+                                <Column editable="true" title="Modelo" type="java.lang.Object"/>
+                                <Column editable="true" title="Cliente" type="java.lang.Object"/>
+                              </Table>
                             </Property>
                             <Property name="backgoundHead" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="0" green="0" red="0" type="rgb"/>
@@ -744,7 +766,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnNuevoUsuario" min="-2" pref="230" max="-2" attributes="0"/>
-                          <EmptySpace pref="79" max="32767" attributes="0"/>
+                          <EmptySpace pref="324" max="32767" attributes="0"/>
                           <Component id="btnModificarUsuario" min="-2" pref="230" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -801,13 +823,18 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="RSMaterialComponent.RSTableMetro" name="rSTableMetro2">
+                        <Component class="RSMaterialComponent.RSTableMetro" name="tablaUsuarios">
                           <Properties>
                             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="ff" green="ff" red="ff" type="rgb"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="0" rowCount="0"/>
+                              <Table columnCount="4" rowCount="0">
+                                <Column editable="false" title="Apellido" type="java.lang.String"/>
+                                <Column editable="false" title="Nombre" type="java.lang.String"/>
+                                <Column editable="false" title="DNI" type="java.lang.String"/>
+                                <Column editable="false" title="Usuario" type="java.lang.Object"/>
+                              </Table>
                             </Property>
                             <Property name="backgoundHead" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="0" green="0" red="0" type="rgb"/>
@@ -917,6 +944,10 @@
               <Color blue="ff" green="99" red="33" type="rgb"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="panelBotonCerrarMouseDragged"/>
+            <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="panelBotonCerrarMousePressed"/>
+          </Events>
 
           <Layout>
             <DimensionLayout dim="0">

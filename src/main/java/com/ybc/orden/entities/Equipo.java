@@ -6,16 +6,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Equipo implements Serializable {
     
@@ -27,8 +30,8 @@ public class Equipo implements Serializable {
     private String numeroSerie;
     private String modelo;
     
-    @OneToOne
-    @Cascade({CascadeType.ALL})
+    @OneToOne    
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
     
 }

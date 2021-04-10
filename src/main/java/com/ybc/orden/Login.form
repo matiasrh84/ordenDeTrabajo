@@ -47,6 +47,10 @@
           </Border>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="jPanel1MouseDragged"/>
+        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jPanel1MousePressed"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -125,12 +129,12 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="rSLabelIcon2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="rSTextFieldMaterial1" pref="0" max="32767" attributes="0"/>
+                              <Component id="txtUsuario" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="rSLabelIcon3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="rSPasswordMaterial1" pref="0" max="32767" attributes="0"/>
+                              <Component id="txtClave" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
@@ -143,12 +147,12 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="rSLabelIcon2" min="-2" max="-2" attributes="0"/>
-                          <Component id="rSTextFieldMaterial1" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtUsuario" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="rSLabelIcon3" min="-2" max="-2" attributes="0"/>
-                          <Component id="rSPasswordMaterial1" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtClave" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -176,7 +180,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="RSMaterialComponent.RSTextFieldMaterial" name="rSTextFieldMaterial1">
+            <Component class="RSMaterialComponent.RSTextFieldMaterial" name="txtUsuario">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -195,8 +199,11 @@
                   <Color blue="ff" green="99" red="33" type="rgb"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtUsuarioKeyPressed"/>
+              </Events>
             </Component>
-            <Component class="RSMaterialComponent.RSPasswordMaterial" name="rSPasswordMaterial1">
+            <Component class="RSMaterialComponent.RSPasswordMaterial" name="txtClave">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -215,6 +222,9 @@
                   <Color blue="ff" green="99" red="33" type="rgb"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtClaveActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

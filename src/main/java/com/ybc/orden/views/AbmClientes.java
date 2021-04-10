@@ -1,9 +1,15 @@
 package com.ybc.orden.views;
 
+import com.ybc.orden.entities.Cliente;
+import com.ybc.orden.services.ClienteServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AbmClientes extends javax.swing.JDialog {
+
+    @Autowired
+    private ClienteServiceImpl clienteService;
 
     public AbmClientes() {
         initComponents();
@@ -16,20 +22,20 @@ public class AbmClientes extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        rSTextFieldMaterial1 = new RSMaterialComponent.RSTextFieldMaterial();
+        txtApellido = new RSMaterialComponent.RSTextFieldMaterial();
         jPanel2 = new javax.swing.JPanel();
         rSButtonIconOne1 = new RSMaterialComponent.RSButtonIconOne();
         rSLabelTextIcon1 = new RSMaterialComponent.RSLabelTextIcon();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        rSTextFieldMaterial5 = new RSMaterialComponent.RSTextFieldMaterial();
+        txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel4 = new javax.swing.JLabel();
-        rSTextFieldMaterial6 = new RSMaterialComponent.RSTextFieldMaterial();
+        txtCuit = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel5 = new javax.swing.JLabel();
-        rSTextFieldMaterial7 = new RSMaterialComponent.RSTextFieldMaterial();
+        txtTelefono = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel6 = new javax.swing.JLabel();
-        rSTextFieldMaterial8 = new RSMaterialComponent.RSTextFieldMaterial();
-        rSTextFieldMaterial9 = new RSMaterialComponent.RSTextFieldMaterial();
+        txtDomicilio = new RSMaterialComponent.RSTextFieldMaterial();
+        txtIva = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel7 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnAceptar = new RSMaterialComponent.RSButtonMaterialIconTwo();
@@ -41,12 +47,12 @@ public class AbmClientes extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 255), 2));
 
-        rSTextFieldMaterial1.setBackground(new java.awt.Color(255, 255, 255));
-        rSTextFieldMaterial1.setForeground(new java.awt.Color(0, 0, 0));
-        rSTextFieldMaterial1.setColorMaterial(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial1.setPhColor(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial1.setPlaceholder("Ingrese los apellidos");
-        rSTextFieldMaterial1.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtApellido.setBackground(new java.awt.Color(255, 255, 255));
+        txtApellido.setForeground(new java.awt.Color(0, 0, 0));
+        txtApellido.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtApellido.setPhColor(new java.awt.Color(51, 153, 255));
+        txtApellido.setPlaceholder("Ingrese los apellidos");
+        txtApellido.setSelectionColor(new java.awt.Color(51, 153, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
@@ -65,7 +71,7 @@ public class AbmClientes extends javax.swing.JDialog {
 
         rSLabelTextIcon1.setForeground(new java.awt.Color(0, 153, 255));
         rSLabelTextIcon1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        rSLabelTextIcon1.setText("Alta de usuarios");
+        rSLabelTextIcon1.setText("Alta de clientes");
         rSLabelTextIcon1.setIcons(null);
         rSLabelTextIcon1.setSizeIcon(1.0F);
 
@@ -96,49 +102,49 @@ public class AbmClientes extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         jLabel2.setText("Nombres:");
 
-        rSTextFieldMaterial5.setBackground(new java.awt.Color(255, 255, 255));
-        rSTextFieldMaterial5.setForeground(new java.awt.Color(0, 0, 0));
-        rSTextFieldMaterial5.setColorMaterial(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial5.setPhColor(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial5.setPlaceholder("Ingrese los nombres");
-        rSTextFieldMaterial5.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtNombre.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombre.setForeground(new java.awt.Color(0, 0, 0));
+        txtNombre.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtNombre.setPhColor(new java.awt.Color(51, 153, 255));
+        txtNombre.setPlaceholder("Ingrese los nombres");
+        txtNombre.setSelectionColor(new java.awt.Color(51, 153, 255));
 
         jLabel4.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         jLabel4.setText("CUIT:");
 
-        rSTextFieldMaterial6.setBackground(new java.awt.Color(255, 255, 255));
-        rSTextFieldMaterial6.setForeground(new java.awt.Color(0, 0, 0));
-        rSTextFieldMaterial6.setColorMaterial(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial6.setPhColor(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial6.setPlaceholder("Ingrese el CUIT");
-        rSTextFieldMaterial6.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtCuit.setBackground(new java.awt.Color(255, 255, 255));
+        txtCuit.setForeground(new java.awt.Color(0, 0, 0));
+        txtCuit.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtCuit.setPhColor(new java.awt.Color(51, 153, 255));
+        txtCuit.setPlaceholder("Ingrese el CUIT");
+        txtCuit.setSelectionColor(new java.awt.Color(51, 153, 255));
 
         jLabel5.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         jLabel5.setText("Teléfono:");
 
-        rSTextFieldMaterial7.setBackground(new java.awt.Color(255, 255, 255));
-        rSTextFieldMaterial7.setForeground(new java.awt.Color(0, 0, 0));
-        rSTextFieldMaterial7.setColorMaterial(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial7.setPhColor(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial7.setPlaceholder("Ingrese el teléfono");
-        rSTextFieldMaterial7.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtTelefono.setBackground(new java.awt.Color(255, 255, 255));
+        txtTelefono.setForeground(new java.awt.Color(0, 0, 0));
+        txtTelefono.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtTelefono.setPhColor(new java.awt.Color(51, 153, 255));
+        txtTelefono.setPlaceholder("Ingrese el teléfono");
+        txtTelefono.setSelectionColor(new java.awt.Color(51, 153, 255));
 
         jLabel6.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         jLabel6.setText("Domicilio:");
 
-        rSTextFieldMaterial8.setBackground(new java.awt.Color(255, 255, 255));
-        rSTextFieldMaterial8.setForeground(new java.awt.Color(0, 0, 0));
-        rSTextFieldMaterial8.setColorMaterial(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial8.setPhColor(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial8.setPlaceholder("Ingrese el domicilio");
-        rSTextFieldMaterial8.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtDomicilio.setBackground(new java.awt.Color(255, 255, 255));
+        txtDomicilio.setForeground(new java.awt.Color(0, 0, 0));
+        txtDomicilio.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtDomicilio.setPhColor(new java.awt.Color(51, 153, 255));
+        txtDomicilio.setPlaceholder("Ingrese el domicilio");
+        txtDomicilio.setSelectionColor(new java.awt.Color(51, 153, 255));
 
-        rSTextFieldMaterial9.setBackground(new java.awt.Color(255, 255, 255));
-        rSTextFieldMaterial9.setForeground(new java.awt.Color(0, 0, 0));
-        rSTextFieldMaterial9.setColorMaterial(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial9.setPhColor(new java.awt.Color(51, 153, 255));
-        rSTextFieldMaterial9.setPlaceholder("Ingrese condición IVA");
-        rSTextFieldMaterial9.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtIva.setBackground(new java.awt.Color(255, 255, 255));
+        txtIva.setForeground(new java.awt.Color(0, 0, 0));
+        txtIva.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtIva.setPhColor(new java.awt.Color(51, 153, 255));
+        txtIva.setPlaceholder("Ingrese condición IVA");
+        txtIva.setSelectionColor(new java.awt.Color(51, 153, 255));
 
         jLabel7.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         jLabel7.setText("IVA:");
@@ -202,27 +208,27 @@ public class AbmClientes extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rSTextFieldMaterial1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtApellido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rSTextFieldMaterial6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(rSTextFieldMaterial5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(txtCuit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rSTextFieldMaterial7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7)
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rSTextFieldMaterial8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(rSTextFieldMaterial9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(txtDomicilio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -233,27 +239,27 @@ public class AbmClientes extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(rSTextFieldMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(rSTextFieldMaterial5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(rSTextFieldMaterial6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCuit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(rSTextFieldMaterial7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(rSTextFieldMaterial8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(rSTextFieldMaterial9, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIva, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -273,7 +279,25 @@ public class AbmClientes extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        // TODO add your handling code here:
+
+        Cliente cliente = Cliente.builder()
+                .apellido(txtApellido.getText())
+                .nombre(txtNombre.getText())
+                .cuit(Long.parseLong(txtCuit.getText()))
+                .telefono(Long.parseLong(txtTelefono.getText()))
+                .direccion(txtDomicilio.getText())
+                .condicionIva(txtIva.getText())
+                .build();
+        
+        txtApellido.setText(null);
+        txtNombre.setText(null);
+        txtCuit.setText(null);
+        txtTelefono.setText(null);
+        txtDomicilio.setText(null);
+        txtIva.setText(null);
+        
+        clienteService.save(cliente);        
+        dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void rSButtonIconOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonIconOne1ActionPerformed
@@ -283,9 +307,9 @@ public class AbmClientes extends javax.swing.JDialog {
     }//GEN-LAST:event_rSButtonIconOne1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        
+
         dispose();
-        
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
 
@@ -303,11 +327,11 @@ public class AbmClientes extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private RSMaterialComponent.RSButtonIconOne rSButtonIconOne1;
     private RSMaterialComponent.RSLabelTextIcon rSLabelTextIcon1;
-    private RSMaterialComponent.RSTextFieldMaterial rSTextFieldMaterial1;
-    private RSMaterialComponent.RSTextFieldMaterial rSTextFieldMaterial5;
-    private RSMaterialComponent.RSTextFieldMaterial rSTextFieldMaterial6;
-    private RSMaterialComponent.RSTextFieldMaterial rSTextFieldMaterial7;
-    private RSMaterialComponent.RSTextFieldMaterial rSTextFieldMaterial8;
-    private RSMaterialComponent.RSTextFieldMaterial rSTextFieldMaterial9;
+    private RSMaterialComponent.RSTextFieldMaterial txtApellido;
+    private RSMaterialComponent.RSTextFieldMaterial txtCuit;
+    private RSMaterialComponent.RSTextFieldMaterial txtDomicilio;
+    private RSMaterialComponent.RSTextFieldMaterial txtIva;
+    private RSMaterialComponent.RSTextFieldMaterial txtNombre;
+    private RSMaterialComponent.RSTextFieldMaterial txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

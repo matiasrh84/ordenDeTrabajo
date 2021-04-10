@@ -58,7 +58,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="rSTextFieldMaterial1" max="32767" attributes="0"/>
+                          <Component id="txtApellido" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -67,14 +67,14 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="rSTextFieldMaterial6" max="32767" attributes="0"/>
-                              <Component id="rSTextFieldMaterial5" max="32767" attributes="0"/>
+                              <Component id="txtCuit" max="32767" attributes="0"/>
+                              <Component id="txtNombre" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="rSTextFieldMaterial7" max="32767" attributes="0"/>
+                          <Component id="txtTelefono" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
@@ -83,8 +83,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="rSTextFieldMaterial8" max="32767" attributes="0"/>
-                              <Component id="rSTextFieldMaterial9" max="32767" attributes="0"/>
+                              <Component id="txtDomicilio" max="32767" attributes="0"/>
+                              <Component id="txtIva" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -100,32 +100,32 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rSTextFieldMaterial1" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="txtApellido" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rSTextFieldMaterial5" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="txtNombre" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rSTextFieldMaterial6" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="txtCuit" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rSTextFieldMaterial7" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="txtTelefono" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rSTextFieldMaterial8" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="txtDomicilio" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rSTextFieldMaterial9" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="txtIva" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
@@ -134,7 +134,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="rSTextFieldMaterial1">
+        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="txtApellido">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -223,7 +223,7 @@
                   <Color blue="ff" green="99" red="0" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="Alta de usuarios"/>
+                <Property name="text" type="java.lang.String" value="Alta de clientes"/>
                 <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
                   <Value id="null"/>
                 </Property>
@@ -248,7 +248,7 @@
             <Property name="text" type="java.lang.String" value="Nombres:"/>
           </Properties>
         </Component>
-        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="rSTextFieldMaterial5">
+        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="txtNombre">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -276,7 +276,7 @@
             <Property name="text" type="java.lang.String" value="CUIT:"/>
           </Properties>
         </Component>
-        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="rSTextFieldMaterial6">
+        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="txtCuit">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -304,7 +304,7 @@
             <Property name="text" type="java.lang.String" value="Tel&#xe9;fono:"/>
           </Properties>
         </Component>
-        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="rSTextFieldMaterial7">
+        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="txtTelefono">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -332,7 +332,7 @@
             <Property name="text" type="java.lang.String" value="Domicilio:"/>
           </Properties>
         </Component>
-        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="rSTextFieldMaterial8">
+        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="txtDomicilio">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -352,7 +352,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="rSTextFieldMaterial9">
+        <Component class="RSMaterialComponent.RSTextFieldMaterial" name="txtIva">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>

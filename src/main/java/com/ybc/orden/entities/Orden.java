@@ -40,4 +40,10 @@ public class Orden implements Serializable {
     @OneToOne
     private Equipo equipo;
     
+    
+    @Override public String toString() {
+     
+        return detalle;
+    } 
+    
 }
