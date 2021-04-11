@@ -1,4 +1,3 @@
-
 package com.ybc.orden.entities;
 
 import java.io.Serializable;
@@ -21,19 +20,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Cliente implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String apellido;
-    private String nombre;        
-    private long cuit;
+    private String nombre;
+    private String cuit;
     private long telefono;
     private String direccion;
     private String condicionIva;
 
- @Override public String toString() {
-     
-        return apellido+", "+nombre;
-    }    
+    @Override
+    public String toString() {
+
+        return apellido + ", " + nombre;
+    }
 }

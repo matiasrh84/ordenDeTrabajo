@@ -4,25 +4,27 @@ import com.ybc.orden.entities.Cliente;
 import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
+import static com.ybc.orden.views.MainFrame.idEquipos;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
+import javax.swing.JOptionPane;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AbmEquipos extends javax.swing.JDialog {
+public class ModificaEquipos extends javax.swing.JDialog {
 
     @Autowired
     private ClienteServiceImpl clienteService;
     @Autowired
     private EquipoServiceImpl equipoService;
     @Autowired
-    private AbmClientes abmClientes;
+    private AltaClientes abmClientes;
 
-    public AbmEquipos() {
+    public ModificaEquipos() {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -41,6 +43,49 @@ public class AbmEquipos extends javax.swing.JDialog {
         }
         AutoCompleteDecorator.decorate(cboCliente);
         
+    }
+    
+    void cargarDatos() {
+        if(idEquipos !=0) {
+            Equipo equipo = equipoService.findById(idEquipos).get();
+            cboCliente.setSelectedItem(equipo.getCliente());
+            cboTipo.setSelectedItem(equipo.getTipo());
+            if(cboTipo.getSelectedItem().toString().equals("Otros")) {
+                txtTipo.setEnabled(true);
+                txtTipo.setText(equipo.getTipo());
+            }
+            txtMarca.setText(equipo.getMarca());
+            txtModelo.setText(equipo.getModelo());
+            txtSerie.setText(equipo.getNumeroSerie());
+        }
+    }
+    
+    void aplicarCambios() {
+        String tipo;
+        if (cboTipo.getSelectedItem().equals("Otros")) {
+            tipo = txtTipo.getText();
+        } else {
+            tipo = cboTipo.getSelectedItem().toString();
+        }
+        Equipo equipo = Equipo.builder()
+                .id(idEquipos)
+                .cliente((Cliente) cboCliente.getSelectedItem())
+                .tipo(tipo)
+                .marca(txtMarca.getText())
+                .modelo(txtModelo.getText())
+                .numeroSerie(txtSerie.getText())
+                .build();
+
+        cboCliente.setSelectedIndex(0);
+        cboTipo.setSelectedIndex(0);
+        txtMarca.setText(null);
+        txtModelo.setText(null);
+        txtSerie.setText(null);
+        txtTipo.setText(null);
+        txtTipo.setEnabled(false);
+
+        equipoService.save(equipo);
+        dispose();
     }
     
 
@@ -98,7 +143,7 @@ public class AbmEquipos extends javax.swing.JDialog {
 
         rSLabelTextIcon1.setForeground(new java.awt.Color(0, 153, 255));
         rSLabelTextIcon1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        rSLabelTextIcon1.setText("Alta de equipos");
+        rSLabelTextIcon1.setText("Modifica equipo");
         rSLabelTextIcon1.setIcons(null);
         rSLabelTextIcon1.setMaximumSize(new java.awt.Dimension(104, 17));
         rSLabelTextIcon1.setMinimumSize(new java.awt.Dimension(104, 17));
@@ -192,7 +237,7 @@ public class AbmEquipos extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -258,13 +303,14 @@ public class AbmEquipos extends javax.swing.JDialog {
                                 .addGap(12, 12, 12)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cboCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(24, 24, 24)
+                                    .addComponent(cboCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btnAltaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 56, Short.MAX_VALUE))))))
+                                        .addGap(0, 0, 0)
+                                        .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnAltaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(11, 11, 11)
@@ -277,14 +323,14 @@ public class AbmEquipos extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cboCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnAltaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
@@ -301,7 +347,7 @@ public class AbmEquipos extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -321,30 +367,11 @@ public class AbmEquipos extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
 
-        String tipo;
-        if (cboTipo.getSelectedItem().equals("Otros")) {
-            tipo = txtTipo.getText();
+        if(!txtMarca.getText().equals("") && !txtModelo.getText().equals("")) {
+            aplicarCambios();
         } else {
-            tipo = cboTipo.getSelectedItem().toString();
+            JOptionPane.showMessageDialog(null, "Debe completar los campos obligatorios");
         }
-        Equipo equipo = Equipo.builder()
-                .cliente((Cliente) cboCliente.getSelectedItem())
-                .tipo(tipo)
-                .marca(txtMarca.getText())
-                .modelo(txtModelo.getText())
-                .numeroSerie(txtSerie.getText())
-                .build();
-
-        cboCliente.setSelectedIndex(0);
-        cboTipo.setSelectedIndex(0);
-        txtMarca.setText(null);
-        txtModelo.setText(null);
-        txtSerie.setText(null);
-        txtTipo.setText(null);
-        txtTipo.setEnabled(false);
-
-        equipoService.save(equipo);
-        dispose();
 
     }//GEN-LAST:event_btnAceptarActionPerformed
 

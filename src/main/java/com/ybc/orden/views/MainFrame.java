@@ -4,16 +4,17 @@ import com.ybc.orden.entities.Cliente;
 import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
-import com.ybc.orden.repositories.ClienteRepository;
 import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
 import com.ybc.orden.services.UsuarioServiceImpl;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,11 @@ public class MainFrame extends javax.swing.JFrame {
     int y;
     int z;
     int w;
+    static int idClientes;
+    static int idEquipos;
+    static int idUsuarios;
+    static int idOrdenes;
+    
     @Autowired
     private ClienteServiceImpl clienteService;
     @Autowired
@@ -34,15 +40,21 @@ public class MainFrame extends javax.swing.JFrame {
     @Autowired
     private EquipoServiceImpl equipoService;
     @Autowired
-    private AbmClientes abmClientes;
+    private AltaClientes altaClientes;
     @Autowired
-    private AbmEquipos abmEquipos;
+    private AltaEquipos altaEquipos;
     @Autowired
-    private AbmUsuarios abmUsuarios;
+    private AltaUsuarios altaUsuarios;
     @Autowired
-    private AbmOrdenes abmOrdenes;
+    private AltaOrdenes altaOrdenes;
     @Autowired
-    private ClienteRepository clienteRepo;
+    private ModificaClientes modificaClientes;
+    @Autowired
+    private ModificaEquipos modificaEquipos;
+    @Autowired
+    private ModificaUsuarios modificaUsuarios;
+    @Autowired
+    private ModificaOrdenes modificaOrdenes;
     
 
     public MainFrame() {
@@ -58,15 +70,18 @@ public class MainFrame extends javax.swing.JFrame {
 
     @PostConstruct
     private void setModal() {
-        abmClientes.setModal(true);
-        abmUsuarios.setModal(true);
-        abmEquipos.setModal(true);
-        abmOrdenes.setModal(true);
+        altaClientes.setModal(true);
+        altaUsuarios.setModal(true);
+        altaEquipos.setModal(true);
+        altaOrdenes.setModal(true);
+        modificaClientes.setModal(true);
+        modificaEquipos.setModal(true);
+        modificaUsuarios.setModal(true);
     }
 
     @PostConstruct
     public void cargarTablaOrdenes() {
-        SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");        
+        SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
         DefaultTableModel modelOrdenes = (DefaultTableModel) tablaOrdenes.getModel();
         List<Orden> datosOrdenes = StreamSupport
                 .stream(ordenService.findAll().spliterator(), false)
@@ -74,24 +89,31 @@ public class MainFrame extends javax.swing.JFrame {
         modelOrdenes.setNumRows(0);
 
         for (Orden datos : datosOrdenes) {
-            Object[] fila = {sd.format(datos.getEntrada()), datos.getEquipo().getMarca(), datos.getCliente().getApellido() + ", " + datos.getCliente().getNombre()};
+            Object[] fila = {datos.getId(), sd.format(datos.getEntrada()), datos.getEquipo().getMarca(), datos.getEquipo().getCliente().getApellido() + ", " + datos.getEquipo().getCliente().getNombre()};
             modelOrdenes.addRow(fila);
         }
+        tablaOrdenes.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(0).setPreferredWidth(0);
 
     }
 
     public void cargarTablaClientes() {
 
         DefaultTableModel modelClientes = (DefaultTableModel) tablaClientes.getModel();
-         List<Cliente> datosClientes = StreamSupport
+        List<Cliente> datosClientes = StreamSupport
                 .stream(clienteService.findAll().spliterator(), false)
                 .collect(Collectors.toList());
         modelClientes.setNumRows(0);
 
         for (Cliente datos : datosClientes) {
-            Object[] fila = {datos.getApellido(), datos.getNombre(), datos.getCuit()};
+            Object[] fila = {datos.getId(), datos.getApellido(), datos.getNombre(), datos.getCuit()};
             modelClientes.addRow(fila);
         }
+
+        tablaClientes.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaClientes.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaClientes.getColumnModel().getColumn(0).setPreferredWidth(0);
 
     }
 
@@ -104,9 +126,13 @@ public class MainFrame extends javax.swing.JFrame {
         modelEquipos.setNumRows(0);
 
         for (Equipo datos : datosEquipos) {
-            Object[] fila = {datos.getMarca(), datos.getModelo(), datos.getCliente().getApellido() + ", " + datos.getCliente().getNombre()};
+            Object[] fila = {datos.getId(), datos.getMarca(), datos.getModelo(), datos.getCliente().getApellido() + ", " + datos.getCliente().getNombre()};
             modelEquipos.addRow(fila);
         }
+        
+        tablaEquipos.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaEquipos.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaEquipos.getColumnModel().getColumn(0).setPreferredWidth(0);
 
     }
 
@@ -119,11 +145,39 @@ public class MainFrame extends javax.swing.JFrame {
         modelUsuarios.setNumRows(0);
 
         for (Usuario datos : datosUsuarios) {
-            Object[] fila = {datos.getApellido(), datos.getNombre(), datos.getDni(), datos.getUsuario()};
+            Object[] fila = {datos.getId(), datos.getApellido(), datos.getNombre(), datos.getDni(), datos.getUsuario()};
             modelUsuarios.addRow(fila);
         }
+        
+        tablaUsuarios.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaUsuarios.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaUsuarios.getColumnModel().getColumn(0).setPreferredWidth(0);
 
     }
+    
+    void modificarCliente() {
+        modificaClientes.cargarDatos();
+        modificaClientes.setVisible(true);
+        cargarTablaClientes();
+    }
+    
+    void modificarEquipo() {
+        modificaEquipos.cargarDatos();
+        modificaEquipos.setVisible(true);
+        cargarTablaEquipos();
+    }
+    
+    void modificarUsuario() {
+        modificaUsuarios.cargarDatos();
+        modificaUsuarios.setVisible(true);
+        cargarTablaUsuarios();
+    }
+    void modificarOrden() {
+        modificaOrdenes.cargarDatos();
+        modificaOrdenes.setVisible(true);
+        cargarTablaOrdenes();
+    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -320,9 +374,17 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Fecha", "Equipo", "Cliente"
+                "Id", "Fecha", "Equipo", "Cliente"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tablaOrdenes.setBackgoundHead(new java.awt.Color(0, 0, 0));
         tablaOrdenes.setBackgoundHover(new java.awt.Color(0, 102, 255));
         tablaOrdenes.setColorBorderHead(new java.awt.Color(204, 204, 204));
@@ -330,6 +392,11 @@ public class MainFrame extends javax.swing.JFrame {
         tablaOrdenes.setColorPrimaryText(new java.awt.Color(0, 102, 255));
         tablaOrdenes.setColorSecundaryText(new java.awt.Color(0, 102, 255));
         tablaOrdenes.setSelectionBackground(new java.awt.Color(0, 102, 255));
+        tablaOrdenes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaOrdenesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaOrdenes);
 
         javax.swing.GroupLayout panelTablaOrdenesLayout = new javax.swing.GroupLayout(panelTablaOrdenes);
@@ -409,14 +476,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Apellido", "Nombre", "CUIT"
+                "Id", "Apellido", "Nombre", "CUIT"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -434,6 +501,11 @@ public class MainFrame extends javax.swing.JFrame {
         tablaClientes.setColorPrimaryText(new java.awt.Color(0, 102, 255));
         tablaClientes.setColorSecundaryText(new java.awt.Color(0, 102, 255));
         tablaClientes.setSelectionBackground(new java.awt.Color(0, 102, 255));
+        tablaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaClientesMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tablaClientes);
 
         javax.swing.GroupLayout panelTablaClientesLayout = new javax.swing.GroupLayout(panelTablaClientes);
@@ -513,9 +585,17 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Marca", "Modelo", "Cliente"
+                "Id", "Marca", "Modelo", "Cliente"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tablaEquipos.setBackgoundHead(new java.awt.Color(0, 0, 0));
         tablaEquipos.setBackgoundHover(new java.awt.Color(0, 102, 255));
         tablaEquipos.setColorBorderHead(new java.awt.Color(204, 204, 204));
@@ -523,6 +603,11 @@ public class MainFrame extends javax.swing.JFrame {
         tablaEquipos.setColorPrimaryText(new java.awt.Color(0, 102, 255));
         tablaEquipos.setColorSecundaryText(new java.awt.Color(0, 102, 255));
         tablaEquipos.setSelectionBackground(new java.awt.Color(0, 102, 255));
+        tablaEquipos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaEquiposMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablaEquipos);
 
         javax.swing.GroupLayout panelTablaEquiposLayout = new javax.swing.GroupLayout(panelTablaEquipos);
@@ -602,14 +687,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Apellido", "Nombre", "DNI", "Usuario"
+                "Id", "Apellido", "Nombre", "DNI", "Usuario"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -627,6 +712,11 @@ public class MainFrame extends javax.swing.JFrame {
         tablaUsuarios.setColorPrimaryText(new java.awt.Color(0, 102, 255));
         tablaUsuarios.setColorSecundaryText(new java.awt.Color(0, 102, 255));
         tablaUsuarios.setSelectionBackground(new java.awt.Color(0, 102, 255));
+        tablaUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaUsuariosMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(tablaUsuarios);
 
         javax.swing.GroupLayout panelTablaUsuariosLayout = new javax.swing.GroupLayout(panelTablaUsuarios);
@@ -660,7 +750,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         btnModificarUsuario.setBackground(new java.awt.Color(255, 255, 255));
         btnModificarUsuario.setForeground(new java.awt.Color(51, 153, 255));
-        btnModificarUsuario.setText("Nuevo usuario");
+        btnModificarUsuario.setText("Modificar usuario");
         btnModificarUsuario.setBackgroundHover(new java.awt.Color(102, 102, 102));
         btnModificarUsuario.setForegroundText(new java.awt.Color(51, 153, 255));
         btnModificarUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -845,7 +935,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
 
-        abmClientes.setVisible(true);
+        idClientes = 0;
+        altaClientes.setVisible(true);
         cargarTablaClientes();
 
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
@@ -858,50 +949,51 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnModificarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarOrdenActionPerformed
 
-        abmOrdenes.setVisible(true);
+        altaOrdenes.setVisible(true);
         cargarTablaOrdenes();
 
     }//GEN-LAST:event_btnModificarOrdenActionPerformed
 
     private void btnNuevaOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaOrdenActionPerformed
 
-        abmOrdenes.setVisible(true);
+        altaOrdenes.setVisible(true);
         cargarTablaOrdenes();
+        
 
 
     }//GEN-LAST:event_btnNuevaOrdenActionPerformed
 
     private void btnModificarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarClienteActionPerformed
 
-        abmClientes.setVisible(true);
+        altaClientes.setVisible(true);
         cargarTablaClientes();
 
     }//GEN-LAST:event_btnModificarClienteActionPerformed
 
     private void btnNuevoEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEquipoActionPerformed
 
-        abmEquipos.setVisible(true);
+        altaEquipos.setVisible(true);
         cargarTablaEquipos();
 
     }//GEN-LAST:event_btnNuevoEquipoActionPerformed
 
     private void btnModificarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarEquipoActionPerformed
 
-        abmEquipos.setVisible(true);
+        altaEquipos.setVisible(true);
         cargarTablaEquipos();
 
     }//GEN-LAST:event_btnModificarEquipoActionPerformed
 
     private void btnNuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoUsuarioActionPerformed
 
-        abmUsuarios.setVisible(true);
+        altaUsuarios.setVisible(true);
         cargarTablaUsuarios();
 
     }//GEN-LAST:event_btnNuevoUsuarioActionPerformed
 
     private void btnModificarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarUsuarioActionPerformed
 
-        abmUsuarios.setVisible(true);
+        altaUsuarios.setVisible(true);
         cargarTablaUsuarios();
 
     }//GEN-LAST:event_btnModificarUsuarioActionPerformed
@@ -923,14 +1015,58 @@ public class MainFrame extends javax.swing.JFrame {
 
         z = evt.getX();
         w = evt.getY();
-        
+
     }//GEN-LAST:event_panelLateralMousePressed
 
     private void panelLateralMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelLateralMouseDragged
 
         this.setLocation(this.getLocation().x + evt.getX() - z, this.getLocation().y + evt.getY() - w);
-        
+
     }//GEN-LAST:event_panelLateralMouseDragged
+
+    private void tablaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaClientesMouseClicked
+
+        if (evt.getClickCount() == 2) {
+            Optional<Cliente> cliente = clienteService.findById(Integer.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString()));
+            idClientes = cliente.get().getId();            
+            modificarCliente();
+            
+        }
+
+    }//GEN-LAST:event_tablaClientesMouseClicked
+
+    private void tablaEquiposMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEquiposMouseClicked
+      
+        if (evt.getClickCount() == 2) {
+            Optional<Equipo> equipo = equipoService.findById(Integer.valueOf(tablaEquipos.getValueAt(tablaEquipos.getSelectedRow(), 0).toString()));
+            idEquipos = equipo.get().getId();            
+            modificarEquipo();
+            
+        }
+        
+    }//GEN-LAST:event_tablaEquiposMouseClicked
+
+    private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
+        
+        if (evt.getClickCount() == 2) {
+            Optional<Usuario> usuario = usuarioService.findById(Integer.valueOf(tablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 0).toString()));
+            idUsuarios = usuario.get().getId();            
+            modificarUsuario();
+            
+        }
+        
+    }//GEN-LAST:event_tablaUsuariosMouseClicked
+
+    private void tablaOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaOrdenesMouseClicked
+
+        if (evt.getClickCount() == 2) {
+            Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
+            idOrdenes = orden.get().getId();            
+            modificarOrden();
+            
+        }
+        
+    }//GEN-LAST:event_tablaOrdenesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -31,4 +31,10 @@ public class Usuario implements Serializable {
     private String clave;
     private boolean tecnico;
     
+    
+    @Override public String toString() {
+     
+        return apellido+", "+nombre;
+    } 
+    
 }

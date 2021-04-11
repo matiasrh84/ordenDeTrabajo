@@ -34,4 +34,10 @@ public class Equipo implements Serializable {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
     
+    @Override public String toString() {
+     
+        return marca + " - " + modelo + " - " + cliente.getApellido().toUpperCase() + ", " + cliente.getNombre().toUpperCase();
+    }
+    
+    
 }
