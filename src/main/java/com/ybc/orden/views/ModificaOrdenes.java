@@ -95,6 +95,7 @@ public class ModificaOrdenes extends javax.swing.JDialog {
             txaConfiguracion.setText(orden.getConfiguracionEquipo());
             txaDiagnostico.setText(orden.getDiagnostico());
             txaSolucion.setText(orden.getSolucion());
+            txtImporte.setText(orden.getImporte());
         }
     }
 
@@ -129,6 +130,7 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                 .configuracionEquipo(txaConfiguracion.getText())
                 .diagnostico(txaDiagnostico.getText())
                 .solucion(txaSolucion.getText())
+                .importe(txtImporte.getText())
                 .build();
         
         cboEquipo.setSelectedIndex(0);
@@ -188,6 +190,8 @@ public class ModificaOrdenes extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
         cboUsuario = new RSMaterialComponent.RSComboBoxMaterial();
         btnAltaUsuario = new RSMaterialComponent.RSButtonMaterialIconTwo();
+        jLabel12 = new javax.swing.JLabel();
+        txtImporte = new RSMaterialComponent.RSTextFieldMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -493,6 +497,16 @@ public class ModificaOrdenes extends javax.swing.JDialog {
             }
         });
 
+        jLabel12.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        jLabel12.setText("Importe:");
+
+        txtImporte.setBackground(new java.awt.Color(255, 255, 255));
+        txtImporte.setForeground(new java.awt.Color(0, 0, 0));
+        txtImporte.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtImporte.setPhColor(new java.awt.Color(51, 153, 255));
+        txtImporte.setPlaceholder("Ingrese el importe");
+        txtImporte.setSelectionColor(new java.awt.Color(51, 153, 255));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -537,7 +551,12 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                                 .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnAltaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -577,6 +596,10 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                     .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAltaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -652,6 +675,7 @@ public class ModificaOrdenes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -678,5 +702,6 @@ public class ModificaOrdenes extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial txtAccesorios;
     private RSMaterialComponent.RSTextFieldMaterial txtDefectos;
     private RSMaterialComponent.RSTextFieldMaterial txtDetalle;
+    private RSMaterialComponent.RSTextFieldMaterial txtImporte;
     // End of variables declaration//GEN-END:variables
 }

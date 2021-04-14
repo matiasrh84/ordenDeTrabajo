@@ -38,7 +38,7 @@ public class Orden implements Serializable {
     private String configuracionEquipo;
     private String diagnostico;
     private String solucion;
-    
+    private String importe;
     @OneToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;    

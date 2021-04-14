@@ -52,7 +52,7 @@ public class AltaEquipos extends javax.swing.JDialog {
         if (cboTipo.getSelectedItem().equals("Otros")) {
             tipo = txtTipo.getText();
         } else {
-            tipo = cboTipo.getSelectedItem().toString();
+            tipo = cboTipo.getSelectedItem().toString();            
         }
         Equipo equipo = Equipo.builder()
                 .cliente((Cliente) cboCliente.getSelectedItem())

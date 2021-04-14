@@ -6,6 +6,7 @@ import com.ybc.orden.entities.Usuario;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
 import com.ybc.orden.services.UsuarioServiceImpl;
+import com.ybc.orden.util.Report;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.List;
@@ -13,7 +14,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
 import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,8 @@ public class AltaOrdenes extends javax.swing.JDialog {
     @Autowired
     private UsuarioServiceImpl usuarioService;
     @Autowired
-    private AltaUsuarios abmUsuarios;
+    private AltaUsuarios abmUsuarios; 
+    
     
     public AltaOrdenes() {
         initComponents();
@@ -102,6 +103,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
                 .configuracionEquipo(txaConfiguracion.getText())
                 .diagnostico(txaDiagnostico.getText())
                 .solucion(txaSolucion.getText())
+                .importe(txtImporte.getText())
                 .build();
         
         cboEquipo.setSelectedIndex(0);
@@ -116,7 +118,10 @@ public class AltaOrdenes extends javax.swing.JDialog {
         txaSolucion.setText(null);
         
         ordenService.save(orden);
-        JOptionPane.showMessageDialog(null, "Imprimiendo orden de trabajo...");
+        Report report = new Report();
+        //JOptionPane.showMessageDialog(null, "Imprimiendo orden de trabajo...");
+        report.OrdenDeTrabajo(orden);
+        report.OrdenDeTrabajoDuplicado(orden);
         dispose();
     }
     
@@ -148,6 +153,8 @@ public class AltaOrdenes extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         txaSolucion = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
+        txtImporte = new RSMaterialComponent.RSTextFieldMaterial();
         radioTaller = new RSMaterialComponent.RSRadioButtonMaterial();
         radioDomicilio = new RSMaterialComponent.RSRadioButtonMaterial();
         cboEquipo = new RSMaterialComponent.RSComboBoxMaterial();
@@ -372,6 +379,16 @@ public class AltaOrdenes extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel12.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        jLabel12.setText("Importe:");
+
+        txtImporte.setBackground(new java.awt.Color(255, 255, 255));
+        txtImporte.setForeground(new java.awt.Color(0, 0, 0));
+        txtImporte.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtImporte.setPhColor(new java.awt.Color(51, 153, 255));
+        txtImporte.setPlaceholder("Ingrese el importe");
+        txtImporte.setSelectionColor(new java.awt.Color(51, 153, 255));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -385,11 +402,21 @@ public class AltaOrdenes extends javax.swing.JDialog {
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -521,11 +548,13 @@ public class AltaOrdenes extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtAccesorios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtDetalle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDefectos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAltaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnAltaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtDefectos, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
@@ -565,7 +594,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
                     .addComponent(jLabel11)
                     .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAltaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -668,6 +697,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -694,5 +724,6 @@ public class AltaOrdenes extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial txtAccesorios;
     private RSMaterialComponent.RSTextFieldMaterial txtDefectos;
     private RSMaterialComponent.RSTextFieldMaterial txtDetalle;
+    private RSMaterialComponent.RSTextFieldMaterial txtImporte;
     // End of variables declaration//GEN-END:variables
 }

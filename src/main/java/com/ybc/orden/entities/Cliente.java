@@ -29,7 +29,10 @@ public class Cliente implements Serializable {
     private String cuit;
     private long telefono;
     private String direccion;
+    private String email;
     private String condicionIva;
+    private String contacto;
+    
 
     @Override
     public String toString() {

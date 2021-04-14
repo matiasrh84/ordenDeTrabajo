@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Orden de trabajo" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8f6a3a7-c17b-4b0a-a52e-2af5e892c51f">
+	<property name="ireport.zoom" value="1.4641000000000075"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="96"/>
+	<parameter name="idOrden" class="java.lang.Integer"/>
+	<parameter name="fecha" class="java.util.Date"/>
+	<parameter name="nombreCliente" class="java.lang.String"/>
+	<parameter name="direccion" class="java.lang.String"/>
+	<parameter name="telefono" class="java.lang.Long"/>
+	<parameter name="email" class="java.lang.String"/>
+	<parameter name="tipoEquipo" class="java.lang.String"/>
+	<parameter name="marca" class="java.lang.String"/>
+	<parameter name="modelo" class="java.lang.String"/>
+	<parameter name="serie" class="java.lang.String"/>
+	<parameter name="accesorios" class="java.lang.String"/>
+	<parameter name="detalle" class="java.lang.String"/>
+	<parameter name="defectos" class="java.lang.String"/>
+	<parameter name="importe" class="java.lang.String"/>
+	<parameter name="condicion" class="java.lang.String"/>
+	<parameter name="tecnico" class="java.lang.String"/>
+	<parameter name="contacto" class="java.lang.String"/>
+	<parameter name="configuracion" class="java.lang.String"/>
+	<parameter name="diagnostico" class="java.lang.String"/>
+	<parameter name="solucion" class="java.lang.String"/>
+	<title>
+		<band height="121" splitType="Stretch">
+			<rectangle>
+				<reportElement x="257" y="19" width="30" height="30" backcolor="#000000" uuid="d1135714-8ee3-4788-8710-351f282e74c5"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="257" y="19" width="30" height="30" forecolor="#FFFFFF" uuid="9503ebb4-c9b2-4da9-83c6-5f2b891cc71b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="19" width="200" height="30" uuid="b6a65f04-a681-4241-9b4e-db0a51a55d1b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="14"/>
+				</textElement>
+				<text><![CDATA[Orden de Servicio Técnico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="257" y="49" width="30" height="23" uuid="27df7689-27ea-457d-a4e1-7190b29180a6"/>
+				<textElement textAlignment="Center">
+					<font size="4"/>
+				</textElement>
+				<text><![CDATA[DOCUMENTO NO VALIDO COMO FACTURA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="56" width="173" height="45" uuid="c2201de2-eb6d-45dd-a421-dc0a82f134ce"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[SAN JUAN 401 - (4000) S. M. Tucumán
+Tel.: (0381) 4305251 / 4219055
+Cel.: 3815100356
+Email: tecnicotecnologic@gmail.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="101" width="173" height="10" uuid="6ceeb31b-ae45-442d-a527-a3cdb68d089b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[IVA RESPONSABLE INSCRIPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="369" y="52" width="19" height="20" uuid="8122aca0-4ddd-441a-abfe-92dcac441d6c"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nº:]]></text>
+			</staticText>
+			<textField pattern="000000" isBlankWhenNull="true">
+				<reportElement x="388" y="52" width="167" height="20" uuid="a50bceeb-409c-42f0-89d1-5a3274901290"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{idOrden}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="366" y="87" width="90" height="16" uuid="5289bd8f-8ce7-4ad8-8d6a-dc31e965be26"/>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[Fecha de ingreso:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="456" y="87" width="99" height="16" uuid="d5cada6f-28cb-4513-91b9-8c0ff8018ce0"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="26" width="233" height="30" uuid="574dc49c-8d5a-4e62-8094-35d751d8db37"/>
+				<imageExpression><![CDATA["/home/matiasrh84/NetBeansProjects/ordenDeTrabajo/src/main/resources/imagenes/tecnologic.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="604" splitType="Stretch">
+			<rectangle radius="0">
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#000000" backcolor="#CC6600" uuid="154d69ec-0f95-40c2-980f-920f446daa6a"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="165" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="5b28f242-73b4-499e-ac06-0afcf1d4e332"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Courier 10 Pitch" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Datos del Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="122" height="20" uuid="d5154b4b-5ee1-4d01-81dc-a60e08b314b8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Nombre / Razón Social:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="56" height="20" uuid="36e5be67-9721-4d74-b75c-70e80c9eace3"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Domicilio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="80" width="55" height="20" uuid="87ba0619-b57a-44b4-bab7-7a7ba6a3bc56"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Teléfono:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="257" y="80" width="38" height="20" uuid="2ae72b93-d502-456f-8b5d-9f09c3fc53e6"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Email:]]></text>
+			</staticText>
+			<rectangle radius="0">
+				<reportElement mode="Opaque" x="0" y="118" width="555" height="20" forecolor="#000000" backcolor="#CC6600" uuid="2adb7efc-d7f3-494a-bc06-1f89709e35b6"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="118" width="165" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="5801700c-93d7-45bd-866a-647e2f87581f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Courier 10 Pitch" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Datos del Equipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="158" width="84" height="20" uuid="ecd5b335-9d17-4e37-b52f-a928863a3725"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Tipo de Equipo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="178" width="39" height="20" uuid="d03a9488-331f-4515-b3aa-261a352e5404"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Marca:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="165" y="178" width="45" height="20" uuid="2dd809dd-efdc-461e-af5e-ee14116b5ec2"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Modelo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="337" y="178" width="92" height="20" uuid="669a5dce-c84a-4544-8631-7e9965f282f1"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Número de serie:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="229" width="114" height="20" uuid="fd510a10-bb58-49a6-9afd-127f819c1e79"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Accesorios Recibidos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="280" width="44" height="20" uuid="2f6b5ef5-7ce2-4493-b817-1afa3a92a737"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Detalle:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="320" width="180" height="20" uuid="6b9dce2d-0a8b-45b9-9699-5be91e0bc7a1"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Defectos reportados por el cliente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="368" width="114" height="20" uuid="2af91412-4830-4cbb-80ac-6982498b11ee"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Condición de ingreso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="446" y="368" width="55" height="20" uuid="99f92819-a5e1-44d0-b765-d7862cb513ca"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Importe: $]]></text>
+			</staticText>
+			<rectangle radius="0">
+				<reportElement mode="Opaque" x="0" y="398" width="555" height="20" forecolor="#000000" backcolor="#CC6600" uuid="0144b72b-00a0-4f8a-ae7c-40bc8c1727c0"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="398" width="97" height="20" forecolor="#FFFFFF" uuid="7cc114da-928f-4cff-a154-63cc4f1ebb3f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier 10 Pitch" isBold="true"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Técnico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="418" width="50" height="20" uuid="17c60de9-41b7-465e-ab6d-fb263f7518b4"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="122" y="40" width="231" height="20" uuid="b20e8ecd-aa92-4c52-988a-640a15d274e2"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{nombreCliente}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="56" y="60" width="497" height="20" uuid="01eab56f-c0cd-4150-a610-3674f38d4751"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="55" y="80" width="201" height="20" uuid="d7e0d821-e291-4e1a-aacf-3663e5f6c0c9"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="295" y="80" width="260" height="20" uuid="d97b9ff2-be3b-4025-b94c-28797f30d99e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{email}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="84" y="158" width="471" height="20" uuid="e3ea7cc0-a214-479c-b8f4-5c7e9730a94a"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tipoEquipo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="39" y="178" width="126" height="20" uuid="81b394b0-5b44-4e38-b00d-fe03cecb1251"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{marca}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="210" y="178" width="126" height="20" uuid="176bc871-63f8-45e6-898f-2a680d2a8a10"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{modelo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="429" y="178" width="126" height="20" uuid="e5301bdc-a110-4905-950c-4704c83200f2"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{serie}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="114" y="229" width="441" height="40" uuid="f84d81e2-3784-44b8-a60a-01cc02b627f5"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{accesorios}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="44" y="280" width="511" height="40" uuid="d565fbb6-3290-47f6-9690-895c82927133"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{detalle}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="180" y="320" width="375" height="40" uuid="1865ce6c-7a21-492c-8b87-b388c4e9f03a"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{defectos}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="114" y="368" width="332" height="20" uuid="689f7ce5-41a2-433d-bad6-3fd3c6468a4a"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{condicion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="501" y="368" width="54" height="20" uuid="e526531c-faa3-4705-9c40-5009276c1f81"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{importe}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="50" y="418" width="505" height="20" uuid="8fb38cff-7ea1-415e-9861-996f28ba3ff4"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{tecnico}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="355" y="40" width="54" height="20" uuid="d297d9bb-507b-4fa5-9d02-ad5d0c0d3591"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Contacto:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="409" y="40" width="146" height="20" uuid="f4e0e088-40a8-4666-b005-a8a0874d4106"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{contacto}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="451" width="555" height="20" backcolor="#CC6600" uuid="e9116ea7-553d-4631-bcee-afd597dd6e16"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="451" width="165" height="20" forecolor="#FFFFFF" uuid="c005011d-29b8-497b-96be-27cbd6326573"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier 10 Pitch" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Informe Técnico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="483" width="58" height="20" uuid="4c3bfa78-4412-4386-b9c5-f13466325829"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Config Eq:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="58" y="483" width="497" height="40" uuid="748f49ae-4e58-472f-838a-61400ec9c648"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{configuracion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="523" width="68" height="20" uuid="d608975d-8b98-4810-9436-12b31970445c"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Diagnóstico:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="563" width="52" height="20" uuid="f4d5bcb5-f176-47bd-bd26-6cde651d8c29"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Solución:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="68" y="523" width="487" height="40" uuid="8efccc59-34d2-42be-aecc-b1a5d33ae31f"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{diagnostico}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="52" y="563" width="503" height="40" uuid="c3759357-0943-496a-8928-20239092d05b"/>
+				<textElement verticalAlignment="Top">
+					<paragraph firstLineIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{solucion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="55" y="17" width="110" height="30" uuid="d43e989c-082a-41e0-b951-6eb3e270a5af"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[--------------------------------
+Firma del CLIENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="401" y="17" width="100" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="879b24f4-91b4-4c81-bed4-595ca16c400b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[--------------------------------
+Firma del TÉCNICO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="47" width="555" height="15" uuid="100e9cea-38fa-494c-91ca-bd7b2a90b79e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DUPLICADO]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>
