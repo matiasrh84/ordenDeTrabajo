@@ -4,16 +4,15 @@ import com.ybc.orden.entities.Cliente;
 import com.ybc.orden.repositories.ClienteRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class ClienteServiceImpl implements ClienteService {
+@Component
+public class ClienteServiceImpl  {
 
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @Override
     @Transactional(readOnly = true)
     public Iterable<Cliente> findAll() {
 
@@ -21,7 +20,6 @@ public class ClienteServiceImpl implements ClienteService {
 
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Optional<Cliente> findById(Integer id) {
         
@@ -29,7 +27,6 @@ public class ClienteServiceImpl implements ClienteService {
                 
     }
 
-    @Override
     @Transactional
     public Cliente save(Cliente cliente) {
         
@@ -37,7 +34,6 @@ public class ClienteServiceImpl implements ClienteService {
         
     }
 
-    @Override
     @Transactional
     public void deleteById(Integer id) {
         

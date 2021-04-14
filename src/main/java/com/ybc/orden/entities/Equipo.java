@@ -6,29 +6,38 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Equipo implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String nombre;
-    private String descripcion;
+    private String tipo;
+    private String marca;
+    private String numeroSerie;
+    private String modelo;
     
-    @OneToOne
-    @Cascade({CascadeType.ALL})
+    @OneToOne    
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
+    
+    @Override public String toString() {
+     
+        return marca + " - " + modelo + " - " + cliente.getApellido().toUpperCase() + ", " + cliente.getNombre().toUpperCase();
+    }
+    
     
 }

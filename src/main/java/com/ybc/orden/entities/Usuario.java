@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Usuario implements Serializable {
     
     @Id
@@ -28,5 +30,11 @@ public class Usuario implements Serializable {
     private String usuario;
     private String clave;
     private boolean tecnico;
+    
+    
+    @Override public String toString() {
+     
+        return apellido+", "+nombre;
+    } 
     
 }
