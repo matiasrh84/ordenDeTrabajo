@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Orden de trabajo" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8f6a3a7-c17b-4b0a-a52e-2af5e892c51f">
 	<property name="ireport.zoom" value="1.4641000000000075"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="384"/>
 	<parameter name="idOrden" class="java.lang.Integer"/>
 	<parameter name="fecha" class="java.util.Date"/>
 	<parameter name="nombreCliente" class="java.lang.String"/>
@@ -110,7 +110,7 @@ Email: tecnicotecnologic@gmail.com]]></text>
 				<text><![CDATA[Datos del Cliente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="40" width="120" height="20" uuid="d5154b4b-5ee1-4d01-81dc-a60e08b314b8"/>
+				<reportElement x="0" y="40" width="124" height="20" uuid="d5154b4b-5ee1-4d01-81dc-a60e08b314b8"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 					<paragraph firstLineIndent="5"/>
@@ -132,7 +132,7 @@ Email: tecnicotecnologic@gmail.com]]></text>
 				<text><![CDATA[Teléfono:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="257" y="80" width="44" height="20" uuid="2ae72b93-d502-456f-8b5d-9f09c3fc53e6"/>
+				<reportElement x="257" y="80" width="40" height="20" uuid="2ae72b93-d502-456f-8b5d-9f09c3fc53e6"/>
 				<textElement verticalAlignment="Middle">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
@@ -153,56 +153,56 @@ Email: tecnicotecnologic@gmail.com]]></text>
 				<text><![CDATA[Datos del Equipo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="158" width="81" height="20" uuid="ecd5b335-9d17-4e37-b52f-a928863a3725"/>
+				<reportElement x="0" y="158" width="84" height="20" uuid="ecd5b335-9d17-4e37-b52f-a928863a3725"/>
 				<textElement verticalAlignment="Middle">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Tipo de Equipo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="178" width="39" height="20" uuid="d03a9488-331f-4515-b3aa-261a352e5404"/>
+				<reportElement x="0" y="192" width="39" height="20" uuid="d03a9488-331f-4515-b3aa-261a352e5404"/>
 				<textElement verticalAlignment="Middle">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Marca:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="165" y="178" width="45" height="20" uuid="2dd809dd-efdc-461e-af5e-ee14116b5ec2"/>
+				<reportElement x="165" y="192" width="45" height="20" uuid="2dd809dd-efdc-461e-af5e-ee14116b5ec2"/>
 				<textElement verticalAlignment="Middle">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Modelo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="337" y="178" width="89" height="20" uuid="669a5dce-c84a-4544-8631-7e9965f282f1"/>
+				<reportElement x="337" y="192" width="92" height="20" uuid="669a5dce-c84a-4544-8631-7e9965f282f1"/>
 				<textElement verticalAlignment="Middle">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Número de serie:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="229" width="110" height="20" uuid="fd510a10-bb58-49a6-9afd-127f819c1e79"/>
+				<reportElement x="0" y="240" width="114" height="20" uuid="fd510a10-bb58-49a6-9afd-127f819c1e79"/>
 				<textElement verticalAlignment="Top">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Accesorios Recibidos:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="280" width="43" height="20" uuid="2f6b5ef5-7ce2-4493-b817-1afa3a92a737"/>
+				<reportElement x="0" y="280" width="46" height="20" uuid="2f6b5ef5-7ce2-4493-b817-1afa3a92a737"/>
 				<textElement verticalAlignment="Top">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Detalle:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="320" width="168" height="20" uuid="6b9dce2d-0a8b-45b9-9699-5be91e0bc7a1"/>
+				<reportElement x="0" y="320" width="180" height="20" uuid="6b9dce2d-0a8b-45b9-9699-5be91e0bc7a1"/>
 				<textElement verticalAlignment="Top">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Defectos reportados por el cliente:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="368" width="111" height="20" uuid="2af91412-4830-4cbb-80ac-6982498b11ee"/>
+				<reportElement x="0" y="368" width="114" height="20" uuid="2af91412-4830-4cbb-80ac-6982498b11ee"/>
 				<textElement verticalAlignment="Top">
 					<paragraph firstLineIndent="5"/>
 				</textElement>
@@ -237,63 +237,47 @@ Email: tecnicotecnologic@gmail.com]]></text>
 				<text><![CDATA[Nombre:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="132" y="40" width="223" height="20" uuid="b20e8ecd-aa92-4c52-988a-640a15d274e2"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<reportElement x="124" y="40" width="231" height="20" uuid="b20e8ecd-aa92-4c52-988a-640a15d274e2"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{nombreCliente}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="55" y="60" width="500" height="20" uuid="01eab56f-c0cd-4150-a610-3674f38d4751"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="56" y="80" width="201" height="20" uuid="d7e0d821-e291-4e1a-aacf-3663e5f6c0c9"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="301" y="80" width="254" height="20" uuid="d97b9ff2-be3b-4025-b94c-28797f30d99e"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<reportElement x="297" y="80" width="258" height="20" uuid="d97b9ff2-be3b-4025-b94c-28797f30d99e"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{email}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="81" y="158" width="474" height="20" uuid="e3ea7cc0-a214-479c-b8f4-5c7e9730a94a"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<reportElement x="84" y="158" width="471" height="20" uuid="e3ea7cc0-a214-479c-b8f4-5c7e9730a94a"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tipoEquipo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="39" y="178" width="126" height="20" uuid="81b394b0-5b44-4e38-b00d-fe03cecb1251"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<reportElement x="39" y="192" width="126" height="20" uuid="81b394b0-5b44-4e38-b00d-fe03cecb1251"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{marca}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="210" y="178" width="126" height="20" uuid="176bc871-63f8-45e6-898f-2a680d2a8a10"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<reportElement x="210" y="192" width="126" height="20" uuid="176bc871-63f8-45e6-898f-2a680d2a8a10"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{modelo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="426" y="178" width="129" height="20" uuid="e5301bdc-a110-4905-950c-4704c83200f2"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<reportElement x="429" y="192" width="126" height="20" uuid="e5301bdc-a110-4905-950c-4704c83200f2"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{serie}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="110" y="229" width="445" height="40" uuid="f84d81e2-3784-44b8-a60a-01cc02b627f5"/>
+				<reportElement x="114" y="240" width="441" height="40" uuid="f84d81e2-3784-44b8-a60a-01cc02b627f5"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -301,13 +285,11 @@ Email: tecnicotecnologic@gmail.com]]></text>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement verticalAlignment="Top">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$P{accesorios}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="43" y="280" width="512" height="40" uuid="d565fbb6-3290-47f6-9690-895c82927133"/>
+				<reportElement x="46" y="280" width="509" height="40" uuid="d565fbb6-3290-47f6-9690-895c82927133"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -315,13 +297,11 @@ Email: tecnicotecnologic@gmail.com]]></text>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement verticalAlignment="Top">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$P{detalle}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="168" y="320" width="387" height="40" uuid="1865ce6c-7a21-492c-8b87-b388c4e9f03a"/>
+				<reportElement x="180" y="320" width="375" height="40" uuid="1865ce6c-7a21-492c-8b87-b388c4e9f03a"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -329,16 +309,12 @@ Email: tecnicotecnologic@gmail.com]]></text>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement verticalAlignment="Top">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$P{defectos}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="111" y="368" width="335" height="20" uuid="689f7ce5-41a2-433d-bad6-3fd3c6468a4a"/>
-				<textElement verticalAlignment="Top">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<reportElement x="114" y="368" width="332" height="20" uuid="689f7ce5-41a2-433d-bad6-3fd3c6468a4a"/>
+				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$P{condicion}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -348,13 +324,11 @@ Email: tecnicotecnologic@gmail.com]]></text>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="50" y="418" width="505" height="20" uuid="8fb38cff-7ea1-415e-9861-996f28ba3ff4"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tecnico}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="355" y="40" width="52" height="20" uuid="d297d9bb-507b-4fa5-9d02-ad5d0c0d3591"/>
+				<reportElement x="355" y="40" width="54" height="20" uuid="d297d9bb-507b-4fa5-9d02-ad5d0c0d3591"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 					<paragraph firstLineIndent="5"/>
@@ -362,10 +336,8 @@ Email: tecnicotecnologic@gmail.com]]></text>
 				<text><![CDATA[Contacto:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="407" y="40" width="148" height="20" uuid="f4e0e088-40a8-4666-b005-a8a0874d4106"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph firstLineIndent="2"/>
-				</textElement>
+				<reportElement x="409" y="40" width="146" height="20" uuid="f4e0e088-40a8-4666-b005-a8a0874d4106"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{contacto}]]></textFieldExpression>
 			</textField>
 		</band>

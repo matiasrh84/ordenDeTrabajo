@@ -17,16 +17,18 @@ public class Login extends javax.swing.JFrame {
 
     @Autowired
     private UsuarioRepository usuarioRepo;
-
     public static ApplicationContext context;
-
+    public static String nombreUsuario;
+    
+    
+    
     public Login() {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
         
     }
-
+      
     public static void displayAllBeans() {
         String[] allBeanNames = context.getBeanDefinitionNames();
         for (String beanName : allBeanNames) {
@@ -42,21 +44,25 @@ public class Login extends javax.swing.JFrame {
                 Login login = context.getBean(Login.class);
                 login.setIconImage(new ImageIcon(getClass().getResource("/imagenes/icono.png")).getImage());
                 login.setVisible(true);
+                
             }
         });
     }
 
     void aplicarCambios() {
         String pass = "";
+        
         char[] password = txtClave.getPassword();
         for (int i = 0; i < password.length; i++) {
             pass += password[i];
         }
         if (usuarioRepo.findByUsuario(txtUsuario.getText()).isPresent()) {
             if (pass.equals(usuarioRepo.findByUsuario(txtUsuario.getText()).get().getClave())) {
-
-                dispose();
+                nombreUsuario = usuarioRepo.findByUsuario(txtUsuario.getText()).get().getUsuario();                
+                Login login = context.getBean(Login.class);
+                login.setVisible(false);
                 MainFrame mainFrame = context.getBean(MainFrame.class);
+                mainFrame.lblUsuario.setText(nombreUsuario);
                 mainFrame.setIconImage(new ImageIcon(getClass().getResource("/imagenes/icono.png")).getImage());
                 mainFrame.setVisible(true);
 

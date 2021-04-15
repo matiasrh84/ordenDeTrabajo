@@ -119,7 +119,6 @@ public class AltaOrdenes extends javax.swing.JDialog {
         
         ordenService.save(orden);
         Report report = new Report();
-        //JOptionPane.showMessageDialog(null, "Imprimiendo orden de trabajo...");
         report.OrdenDeTrabajo(orden);
         report.OrdenDeTrabajoDuplicado(orden);
         dispose();

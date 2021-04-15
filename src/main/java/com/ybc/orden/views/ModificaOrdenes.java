@@ -6,6 +6,7 @@ import com.ybc.orden.entities.Usuario;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
 import com.ybc.orden.services.UsuarioServiceImpl;
+import com.ybc.orden.util.Report;
 import static com.ybc.orden.views.MainFrame.idOrdenes;
 import java.util.Calendar;
 import java.util.List;
@@ -142,9 +143,13 @@ public class ModificaOrdenes extends javax.swing.JDialog {
         txtDefectos.setText(null);
         txaConfiguracion.setText(null);
         txaDiagnostico.setText(null);
-        txaSolucion.setText(null);
+        txaSolucion.setText(null);        
         
         ordenService.save(orden);
+        
+        Report report = new Report();
+        report.OrdenDeTrabajo(orden);
+        report.OrdenDeTrabajoDuplicado(orden);
         dispose();
     }
     
