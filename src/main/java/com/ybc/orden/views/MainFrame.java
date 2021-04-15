@@ -1,9 +1,11 @@
 package com.ybc.orden.views;
 
+import static com.ybc.orden.Login.nombreUsuario;
 import com.ybc.orden.entities.Cliente;
 import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
+import com.ybc.orden.repositories.UsuarioRepository;
 import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
@@ -54,6 +56,8 @@ public class MainFrame extends javax.swing.JFrame {
     private ModificaUsuarios modificaUsuarios;
     @Autowired
     private ModificaOrdenes modificaOrdenes;
+    @Autowired
+    private UsuarioRepository usuarioRepo;
     
 
     public MainFrame() {
@@ -76,6 +80,7 @@ public class MainFrame extends javax.swing.JFrame {
         modificaClientes.setModal(true);
         modificaEquipos.setModal(true);
         modificaUsuarios.setModal(true);
+        
     }
 
     @PostConstruct
@@ -94,9 +99,9 @@ public class MainFrame extends javax.swing.JFrame {
         tablaOrdenes.getColumnModel().getColumn(0).setMaxWidth(0);
         tablaOrdenes.getColumnModel().getColumn(0).setMinWidth(0);
         tablaOrdenes.getColumnModel().getColumn(0).setPreferredWidth(0);
-
-    }
-
+        
+    }    
+   
     public void cargarTablaClientes() {
 
         DefaultTableModel modelClientes = (DefaultTableModel) tablaClientes.getModel();
@@ -219,7 +224,7 @@ public class MainFrame extends javax.swing.JFrame {
         panelBotonCerrar = new javax.swing.JPanel();
         btnCerrar = new RSMaterialComponent.RSButtonIconOne();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblUsuario = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -833,8 +838,8 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1.setText(" Usuario: ");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
 
-        jLabel2.setFont(new java.awt.Font("Dialog.plain", 0, 14)); // NOI18N
-        jLabel2.setText("Usuario prueba");
+        lblUsuario.setFont(new java.awt.Font("Dialog.plain", 1, 14)); // NOI18N
+        lblUsuario.setText("Usuario prueba");
 
         jLabel3.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
         jLabel3.setText("ybcomputacion.com");
@@ -852,7 +857,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addContainerGap())))
@@ -867,7 +872,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
+                    .addComponent(lblUsuario)
                     .addComponent(jLabel3))
                 .addContainerGap())
         );
@@ -948,7 +953,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnModificarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarOrdenActionPerformed
 
-        altaOrdenes.setVisible(true);
+        modificaOrdenes.setVisible(true);
         cargarTablaOrdenes();
 
     }//GEN-LAST:event_btnModificarOrdenActionPerformed
@@ -1084,12 +1089,12 @@ public class MainFrame extends javax.swing.JFrame {
     private RSMaterialComponent.RSButtonMaterialIconOne btnSalir;
     private RSMaterialComponent.RSButtonMaterialIconOne btnUsuarios;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    public javax.swing.JLabel lblUsuario;
     private javax.swing.JPanel panelBotonCerrar;
     private javax.swing.JPanel panelBotones;
     private javax.swing.JPanel panelClientes;
