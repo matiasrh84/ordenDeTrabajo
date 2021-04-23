@@ -1,6 +1,5 @@
 package com.ybc.orden.views;
 
-import static com.ybc.orden.Login.nombreUsuario;
 import com.ybc.orden.entities.Cliente;
 import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.entities.Orden;
@@ -10,6 +9,7 @@ import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
 import com.ybc.orden.services.UsuarioServiceImpl;
+import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +31,7 @@ public class MainFrame extends javax.swing.JFrame {
     static int idEquipos;
     static int idUsuarios;
     static int idOrdenes;
+    
     
     @Autowired
     private ClienteServiceImpl clienteService;
@@ -73,6 +74,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     @PostConstruct
     private void setModal() {
+        btnOrdenes.setBackground(Color.decode("#cc6600"));
         altaClientes.setModal(true);
         altaUsuarios.setModal(true);
         altaEquipos.setModal(true);
@@ -892,7 +894,12 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOrdenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenesActionPerformed
-
+        
+        btnOrdenes.setBackground(Color.decode("#cc6600"));
+        btnClientes.setBackground(Color.decode("#ff9933"));
+        btnEquipos.setBackground(Color.decode("#ff9933"));
+        btnUsuarios.setBackground(Color.decode("#ff9933"));
+        
         panelOrdenes.setVisible(true);
         panelClientes.setVisible(false);
         panelEquipos.setVisible(false);
@@ -909,6 +916,11 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
 
+        btnOrdenes.setBackground(Color.decode("#ff9933"));
+        btnClientes.setBackground(Color.decode("#cc6600"));
+        btnEquipos.setBackground(Color.decode("#ff9933"));
+        btnUsuarios.setBackground(Color.decode("#ff9933"));
+        
         panelOrdenes.setVisible(false);
         panelClientes.setVisible(true);
         panelEquipos.setVisible(false);
@@ -919,6 +931,11 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnEquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEquiposActionPerformed
 
+        btnOrdenes.setBackground(Color.decode("#ff9933"));
+        btnClientes.setBackground(Color.decode("#ff9933"));
+        btnEquipos.setBackground(Color.decode("#cc6600"));
+        btnUsuarios.setBackground(Color.decode("#ff9933"));
+        
         panelOrdenes.setVisible(false);
         panelClientes.setVisible(false);
         panelEquipos.setVisible(true);
@@ -929,6 +946,11 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
 
+        btnOrdenes.setBackground(Color.decode("#ff9933"));
+        btnClientes.setBackground(Color.decode("#ff9933"));
+        btnEquipos.setBackground(Color.decode("#ff9933"));
+        btnUsuarios.setBackground(Color.decode("#cc6600"));
+        
         panelOrdenes.setVisible(false);
         panelClientes.setVisible(false);
         panelEquipos.setVisible(false);
