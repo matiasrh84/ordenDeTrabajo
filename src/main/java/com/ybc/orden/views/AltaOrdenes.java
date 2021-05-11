@@ -3,6 +3,7 @@ package com.ybc.orden.views;
 import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
+import com.ybc.orden.services.EstadoOrdenServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
 import com.ybc.orden.services.UsuarioServiceImpl;
@@ -34,6 +35,8 @@ public class AltaOrdenes extends javax.swing.JDialog {
     private UsuarioServiceImpl usuarioService;
     @Autowired
     private AltaUsuarios abmUsuarios; 
+    @Autowired
+    private EstadoOrdenServiceImpl estadoOrdenService;
     
     
     public AltaOrdenes() {
@@ -56,7 +59,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
             cboEquipo.addItem(equipo);
         }
         AutoCompleteDecorator.decorate(cboEquipo);
-
+        cboEquipo.setSelectedIndex(0);
     }
 
     @PostConstruct
@@ -106,6 +109,8 @@ public class AltaOrdenes extends javax.swing.JDialog {
                 .importe(txtImporte.getText())
                 .build();
         
+        
+        
         cboEquipo.setSelectedIndex(0);
         cboUsuario.setSelectedIndex(0);
         radioTaller.setSelected(true);
@@ -117,7 +122,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
         txaDiagnostico.setText(null);
         txaSolucion.setText(null);
         
-        ordenService.save(orden);
+        ordenService.save(orden);        
         Report report = new Report();
         report.OrdenDeTrabajo(orden);
         report.OrdenDeTrabajoDuplicado(orden);
@@ -601,11 +606,11 @@ public class AltaOrdenes extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -633,6 +638,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
 
         abmEquipos.setVisible(true);
         cargarEquipos();
+        cboEquipo.setSelectedIndex(cboEquipo.getItemCount()-1);
 
     }//GEN-LAST:event_btnAltaEquipoActionPerformed
 
