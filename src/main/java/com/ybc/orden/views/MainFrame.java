@@ -2,13 +2,15 @@ package com.ybc.orden.views;
 
 import com.ybc.orden.entities.Cliente;
 import com.ybc.orden.entities.Equipo;
+import com.ybc.orden.entities.EstadoOrden;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
-import com.ybc.orden.repositories.UsuarioRepository;
 import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
+import com.ybc.orden.services.EstadoOrdenServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
 import com.ybc.orden.services.UsuarioServiceImpl;
+import com.ybc.orden.util.Report;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -16,7 +18,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,8 +36,10 @@ public class MainFrame extends javax.swing.JFrame {
     static int idEquipos;
     static int idUsuarios;
     static int idOrdenes;
-    
-    
+    static int idEstado;
+    public String usuario;
+    DefaultTableModel modelOrdenes;
+
     @Autowired
     private ClienteServiceImpl clienteService;
     @Autowired
@@ -58,8 +65,9 @@ public class MainFrame extends javax.swing.JFrame {
     @Autowired
     private ModificaOrdenes modificaOrdenes;
     @Autowired
-    private UsuarioRepository usuarioRepo;
-    
+    private Estado estado;
+    @Autowired
+    private EstadoOrdenServiceImpl estadoOrdenService;
 
     public MainFrame() {
         initComponents();
@@ -69,6 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
         panelClientes.setVisible(false);
         panelEquipos.setVisible(false);
         panelUsuarios.setVisible(false);
+        txtBuscar.requestFocus();
 
     }
 
@@ -79,31 +88,35 @@ public class MainFrame extends javax.swing.JFrame {
         altaUsuarios.setModal(true);
         altaEquipos.setModal(true);
         altaOrdenes.setModal(true);
+        estado.setModal(true);
         modificaClientes.setModal(true);
         modificaEquipos.setModal(true);
         modificaUsuarios.setModal(true);
-        
     }
 
     @PostConstruct
     public void cargarTablaOrdenes() {
         SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
-        DefaultTableModel modelOrdenes = (DefaultTableModel) tablaOrdenes.getModel();
-        List<Orden> datosOrdenes = StreamSupport
-                .stream(ordenService.findAll().spliterator(), false)
+        modelOrdenes = (DefaultTableModel) tablaOrdenes.getModel();
+        List<EstadoOrden> datosOrdenes = StreamSupport
+                .stream(estadoOrdenService.findAll().spliterator(), false)
                 .collect(Collectors.toList());
         modelOrdenes.setNumRows(0);
 
-        for (Orden datos : datosOrdenes) {
-            Object[] fila = {datos.getId(), sd.format(datos.getEntrada()), datos.getEquipo().getMarca(), datos.getEquipo().getCliente().getApellido() + ", " + datos.getEquipo().getCliente().getNombre()};
+        for (EstadoOrden datos : datosOrdenes) {
+            Object[] fila = {datos.getOrden().getId(), datos.getFecha(), datos.getOrden().getEquipo(), datos.getOrden().getEquipo().getCliente().toString(), datos.getOrden().getUsuario().toString(), datos.getEstado(), datos.getId()};
+            System.out.println(datos);
             modelOrdenes.addRow(fila);
         }
         tablaOrdenes.getColumnModel().getColumn(0).setMaxWidth(0);
         tablaOrdenes.getColumnModel().getColumn(0).setMinWidth(0);
         tablaOrdenes.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
-    }    
-   
+        tablaOrdenes.getColumnModel().getColumn(6).setMaxWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(6).setMinWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(6).setPreferredWidth(0);
+
+    }
+
     public void cargarTablaClientes() {
 
         DefaultTableModel modelClientes = (DefaultTableModel) tablaClientes.getModel();
@@ -135,7 +148,7 @@ public class MainFrame extends javax.swing.JFrame {
             Object[] fila = {datos.getId(), datos.getMarca(), datos.getModelo(), datos.getCliente().getApellido() + ", " + datos.getCliente().getNombre()};
             modelEquipos.addRow(fila);
         }
-        
+
         tablaEquipos.getColumnModel().getColumn(0).setMaxWidth(0);
         tablaEquipos.getColumnModel().getColumn(0).setMinWidth(0);
         tablaEquipos.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -154,36 +167,36 @@ public class MainFrame extends javax.swing.JFrame {
             Object[] fila = {datos.getId(), datos.getApellido(), datos.getNombre(), datos.getDni(), datos.getUsuario()};
             modelUsuarios.addRow(fila);
         }
-        
+
         tablaUsuarios.getColumnModel().getColumn(0).setMaxWidth(0);
         tablaUsuarios.getColumnModel().getColumn(0).setMinWidth(0);
         tablaUsuarios.getColumnModel().getColumn(0).setPreferredWidth(0);
 
     }
-    
+
     void modificarCliente() {
         modificaClientes.cargarDatos();
         modificaClientes.setVisible(true);
         cargarTablaClientes();
     }
-    
+
     void modificarEquipo() {
         modificaEquipos.cargarDatos();
         modificaEquipos.setVisible(true);
         cargarTablaEquipos();
     }
-    
+
     void modificarUsuario() {
         modificaUsuarios.cargarDatos();
         modificaUsuarios.setVisible(true);
         cargarTablaUsuarios();
     }
+
     void modificarOrden() {
         modificaOrdenes.cargarDatos();
         modificaOrdenes.setVisible(true);
         cargarTablaOrdenes();
     }
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -203,8 +216,12 @@ public class MainFrame extends javax.swing.JFrame {
         panelTablaOrdenes = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaOrdenes = new RSMaterialComponent.RSTableMetro();
+        txtBuscar = new RSMaterialComponent.RSTextFieldMaterial();
+        rSLabelIcon2 = new RSMaterialComponent.RSLabelIcon();
         btnModificarOrden = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnNuevaOrden = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnNuevaOrden1 = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnNuevaOrden2 = new RSMaterialComponent.RSButtonMaterialIconOne();
         panelClientes = new javax.swing.JPanel();
         panelTablaClientes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -225,6 +242,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnModificarUsuario = new RSMaterialComponent.RSButtonMaterialIconOne();
         panelBotonCerrar = new javax.swing.JPanel();
         btnCerrar = new RSMaterialComponent.RSButtonIconOne();
+        jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -380,11 +398,11 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Fecha", "Equipo", "Cliente"
+                "Id", "Fecha", "Equipo", "Cliente", "Técnico", "Estado", "idEstado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -405,20 +423,46 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablaOrdenes);
 
+        txtBuscar.setBackground(new java.awt.Color(255, 255, 255));
+        txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
+        txtBuscar.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtBuscar.setPhColor(new java.awt.Color(0, 0, 0));
+        txtBuscar.setPlaceholder("Buscar");
+        txtBuscar.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
+        });
+
+        rSLabelIcon2.setForeground(new java.awt.Color(255, 255, 255));
+        rSLabelIcon2.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+
         javax.swing.GroupLayout panelTablaOrdenesLayout = new javax.swing.GroupLayout(panelTablaOrdenes);
         panelTablaOrdenes.setLayout(panelTablaOrdenesLayout);
         panelTablaOrdenesLayout.setHorizontalGroup(
             panelTablaOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTablaOrdenesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                .addGroup(panelTablaOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                    .addGroup(panelTablaOrdenesLayout.createSequentialGroup()
+                        .addComponent(rSLabelIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelTablaOrdenesLayout.setVerticalGroup(
             panelTablaOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTablaOrdenesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                .addGroup(panelTablaOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rSLabelIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -447,6 +491,30 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnNuevaOrden1.setBackground(new java.awt.Color(255, 153, 51));
+        btnNuevaOrden1.setText("Modificar estado");
+        btnNuevaOrden1.setBackgroundHover(new java.awt.Color(204, 102, 0));
+        btnNuevaOrden1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnNuevaOrden1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MOUSE);
+        btnNuevaOrden1.setRound(20);
+        btnNuevaOrden1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaOrden1ActionPerformed(evt);
+            }
+        });
+
+        btnNuevaOrden2.setBackground(new java.awt.Color(255, 153, 51));
+        btnNuevaOrden2.setText("Reporte");
+        btnNuevaOrden2.setBackgroundHover(new java.awt.Color(204, 102, 0));
+        btnNuevaOrden2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnNuevaOrden2.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.RECEIPT);
+        btnNuevaOrden2.setRound(20);
+        btnNuevaOrden2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaOrden2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelOrdenesLayout = new javax.swing.GroupLayout(panelOrdenes);
         panelOrdenes.setLayout(panelOrdenesLayout);
         panelOrdenesLayout.setHorizontalGroup(
@@ -454,9 +522,13 @@ public class MainFrame extends javax.swing.JFrame {
             .addComponent(panelTablaOrdenes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOrdenesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnModificarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnNuevaOrden1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnNuevaOrden2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnModificarOrden, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelOrdenesLayout.setVerticalGroup(
@@ -466,7 +538,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnModificarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNuevaOrden1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNuevaOrden2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -817,12 +891,20 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Dialog.plain", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("YBG órdenes de trabajo");
+
         javax.swing.GroupLayout panelBotonCerrarLayout = new javax.swing.GroupLayout(panelBotonCerrar);
         panelBotonCerrar.setLayout(panelBotonCerrarLayout);
         panelBotonCerrarLayout.setHorizontalGroup(
             panelBotonCerrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotonCerrarLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -830,8 +912,12 @@ public class MainFrame extends javax.swing.JFrame {
             panelBotonCerrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBotonCerrarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelBotonCerrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBotonCerrarLayout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
+                        .addGap(10, 10, 10))
+                    .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -840,10 +926,14 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1.setText(" Usuario: ");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
 
+        lblUsuario.setBackground(new java.awt.Color(255, 255, 255));
         lblUsuario.setFont(new java.awt.Font("Dialog.plain", 1, 14)); // NOI18N
+        lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
         lblUsuario.setText("Usuario prueba");
 
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("ybcomputacion.com");
 
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
@@ -894,12 +984,12 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOrdenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenesActionPerformed
-        
+
         btnOrdenes.setBackground(Color.decode("#cc6600"));
         btnClientes.setBackground(Color.decode("#ff9933"));
         btnEquipos.setBackground(Color.decode("#ff9933"));
         btnUsuarios.setBackground(Color.decode("#ff9933"));
-        
+
         panelOrdenes.setVisible(true);
         panelClientes.setVisible(false);
         panelEquipos.setVisible(false);
@@ -920,7 +1010,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnClientes.setBackground(Color.decode("#cc6600"));
         btnEquipos.setBackground(Color.decode("#ff9933"));
         btnUsuarios.setBackground(Color.decode("#ff9933"));
-        
+
         panelOrdenes.setVisible(false);
         panelClientes.setVisible(true);
         panelEquipos.setVisible(false);
@@ -935,7 +1025,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnClientes.setBackground(Color.decode("#ff9933"));
         btnEquipos.setBackground(Color.decode("#cc6600"));
         btnUsuarios.setBackground(Color.decode("#ff9933"));
-        
+
         panelOrdenes.setVisible(false);
         panelClientes.setVisible(false);
         panelEquipos.setVisible(true);
@@ -950,7 +1040,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnClientes.setBackground(Color.decode("#ff9933"));
         btnEquipos.setBackground(Color.decode("#ff9933"));
         btnUsuarios.setBackground(Color.decode("#cc6600"));
-        
+
         panelOrdenes.setVisible(false);
         panelClientes.setVisible(false);
         panelEquipos.setVisible(false);
@@ -975,8 +1065,13 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnModificarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarOrdenActionPerformed
 
-        modificaOrdenes.setVisible(true);
-        cargarTablaOrdenes();
+        if (tablaOrdenes.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una orden");
+        } else {
+            Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
+            idOrdenes = orden.get().getId();
+            modificarOrden();
+        }
 
     }//GEN-LAST:event_btnModificarOrdenActionPerformed
 
@@ -984,7 +1079,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         altaOrdenes.setVisible(true);
         cargarTablaOrdenes();
-        
 
 
     }//GEN-LAST:event_btnNuevaOrdenActionPerformed
@@ -1054,45 +1148,82 @@ public class MainFrame extends javax.swing.JFrame {
 
         if (evt.getClickCount() == 2) {
             Optional<Cliente> cliente = clienteService.findById(Integer.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString()));
-            idClientes = cliente.get().getId();            
+            idClientes = cliente.get().getId();
             modificarCliente();
-            
+
         }
 
     }//GEN-LAST:event_tablaClientesMouseClicked
 
     private void tablaEquiposMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEquiposMouseClicked
-      
+
         if (evt.getClickCount() == 2) {
             Optional<Equipo> equipo = equipoService.findById(Integer.valueOf(tablaEquipos.getValueAt(tablaEquipos.getSelectedRow(), 0).toString()));
-            idEquipos = equipo.get().getId();            
+            idEquipos = equipo.get().getId();
             modificarEquipo();
-            
+
         }
-        
+
     }//GEN-LAST:event_tablaEquiposMouseClicked
 
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
-        
+
         if (evt.getClickCount() == 2) {
             Optional<Usuario> usuario = usuarioService.findById(Integer.valueOf(tablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 0).toString()));
-            idUsuarios = usuario.get().getId();            
+            idUsuarios = usuario.get().getId();
             modificarUsuario();
-            
+
         }
-        
+
     }//GEN-LAST:event_tablaUsuariosMouseClicked
 
     private void tablaOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaOrdenesMouseClicked
 
         if (evt.getClickCount() == 2) {
             Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
-            idOrdenes = orden.get().getId();            
+            idOrdenes = orden.get().getId();
             modificarOrden();
-            
+
         }
-        
+
     }//GEN-LAST:event_tablaOrdenesMouseClicked
+
+    private void btnNuevaOrden1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaOrden1ActionPerformed
+
+        if (tablaOrdenes.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una orden");
+        } else {
+            idEstado = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 6).toString());
+            idOrdenes = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString());
+            System.out.println(idEstado);
+            System.out.println(idOrdenes);
+            estado.setVisible(true);
+            cargarTablaOrdenes();
+        }
+
+    }//GEN-LAST:event_btnNuevaOrden1ActionPerformed
+
+    private void btnNuevaOrden2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaOrden2ActionPerformed
+
+        if (tablaOrdenes.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una orden");
+        } else {
+            Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
+            Report report = new Report();
+            report.OrdenDeTrabajo(orden.get());
+            report.OrdenDeTrabajoDuplicado(orden.get());
+        }
+
+
+    }//GEN-LAST:event_btnNuevaOrden2ActionPerformed
+
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+
+        TableRowSorter sorter = new TableRowSorter(modelOrdenes);
+            sorter.setRowFilter(RowFilter.regexFilter(".*" + txtBuscar.getText() + ".*"));
+            tablaOrdenes.setRowSorter(sorter);
+        
+    }//GEN-LAST:event_txtBuscarKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1104,6 +1235,8 @@ public class MainFrame extends javax.swing.JFrame {
     private RSMaterialComponent.RSButtonMaterialIconOne btnModificarOrden;
     private RSMaterialComponent.RSButtonMaterialIconOne btnModificarUsuario;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevaOrden;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnNuevaOrden1;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnNuevaOrden2;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevoCliente;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevoEquipo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevoUsuario;
@@ -1111,6 +1244,7 @@ public class MainFrame extends javax.swing.JFrame {
     private RSMaterialComponent.RSButtonMaterialIconOne btnSalir;
     private RSMaterialComponent.RSButtonMaterialIconOne btnUsuarios;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1131,10 +1265,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel panelTablaUsuarios;
     private javax.swing.JPanel panelUsuarios;
     private RSMaterialComponent.RSLabelIcon rSLabelIcon1;
+    private RSMaterialComponent.RSLabelIcon rSLabelIcon2;
     private RSMaterialComponent.RSTableMetro tablaClientes;
     private RSMaterialComponent.RSTableMetro tablaEquipos;
     public static RSMaterialComponent.RSTableMetro tablaOrdenes;
     private RSMaterialComponent.RSTableMetro tablaUsuarios;
+    private RSMaterialComponent.RSTextFieldMaterial txtBuscar;
     // End of variables declaration//GEN-END:variables
 
 }

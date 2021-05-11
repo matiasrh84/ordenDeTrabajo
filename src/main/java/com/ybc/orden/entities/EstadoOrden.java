@@ -16,41 +16,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Orden implements Serializable {
-    
+public class EstadoOrden implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;    
+    private int id;
+    private String estado;   
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date entrada;
-    private String lugar;
-    private String condicion;
-    private String accesoriosRecibidos;
-    private String detalle;
-    private String defectosReportados;
-    private String configuracionEquipo;
-    private String diagnostico;
-    private String solucion;
-    private String importe;
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;    
-    @OneToOne
-    @JoinColumn(name = "equipo_id")
-    private Equipo equipo; 
-    
-    
-    
-    @Override public String toString() {
-     
-        return detalle;
-    } 
-    
+    private Date fecha;
+   @OneToOne
+    @JoinColumn(name = "orden_id")
+    private Orden orden;
 }

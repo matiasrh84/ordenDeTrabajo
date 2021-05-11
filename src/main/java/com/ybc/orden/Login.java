@@ -20,8 +20,6 @@ public class Login extends javax.swing.JFrame {
     public static ApplicationContext context;
     public static String nombreUsuario;
     
-    
-    
     public Login() {
         initComponents();
         setResizable(false);
@@ -58,9 +56,10 @@ public class Login extends javax.swing.JFrame {
         }
         if (usuarioRepo.findByUsuario(txtUsuario.getText()).isPresent()) {
             if (pass.equals(usuarioRepo.findByUsuario(txtUsuario.getText()).get().getClave())) {
+                
                 nombreUsuario = usuarioRepo.findByUsuario(txtUsuario.getText()).get().getUsuario();                
                 Login login = context.getBean(Login.class);
-                login.setVisible(false);
+                login.setVisible(false);                
                 MainFrame mainFrame = context.getBean(MainFrame.class);
                 mainFrame.lblUsuario.setText(nombreUsuario);
                 mainFrame.setIconImage(new ImageIcon(getClass().getResource("/imagenes/icono.png")).getImage());
