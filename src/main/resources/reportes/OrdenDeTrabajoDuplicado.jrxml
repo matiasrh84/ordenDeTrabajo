@@ -39,7 +39,7 @@
 			<staticText>
 				<reportElement x="355" y="19" width="200" height="30" uuid="b6a65f04-a681-4241-9b4e-db0a51a55d1b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="14"/>
+					<font fontName="Arial" size="14"/>
 				</textElement>
 				<text><![CDATA[Orden de Servicio Técnico]]></text>
 			</staticText>
