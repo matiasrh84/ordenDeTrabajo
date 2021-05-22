@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Orden de trabajo" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8f6a3a7-c17b-4b0a-a52e-2af5e892c51f">
 	<property name="ireport.zoom" value="1.4641000000000075"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="144"/>
 	<parameter name="idOrden" class="java.lang.Integer"/>
 	<parameter name="fecha" class="java.util.Date"/>
 	<parameter name="nombreCliente" class="java.lang.String"/>
@@ -108,7 +108,7 @@ Email: tecnicotecnologic@gmail.com]]></text>
 			<staticText>
 				<reportElement mode="Transparent" x="0" y="0" width="165" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="5b28f242-73b4-499e-ac06-0afcf1d4e332"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="Courier 10 Pitch" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single" firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Datos del Cliente]]></text>
@@ -151,7 +151,7 @@ Email: tecnicotecnologic@gmail.com]]></text>
 			<staticText>
 				<reportElement mode="Transparent" x="0" y="118" width="165" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="5801700c-93d7-45bd-866a-647e2f87581f"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="Courier 10 Pitch" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single" firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Datos del Equipo]]></text>
@@ -228,7 +228,7 @@ Email: tecnicotecnologic@gmail.com]]></text>
 			<staticText>
 				<reportElement x="0" y="398" width="97" height="20" forecolor="#FFFFFF" uuid="7cc114da-928f-4cff-a154-63cc4f1ebb3f"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Courier 10 Pitch" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph firstLineIndent="5"/>
 				</textElement>
 				<text><![CDATA[Técnico]]></text>
@@ -370,7 +370,7 @@ Email: tecnicotecnologic@gmail.com]]></text>
 				<reportElement x="0" y="451" width="165" height="20" forecolor="#FFFFFF" uuid="c005011d-29b8-497b-96be-27cbd6326573"/>
 				<box leftPadding="5"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Courier 10 Pitch" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Informe Técnico]]></text>
 			</staticText>
