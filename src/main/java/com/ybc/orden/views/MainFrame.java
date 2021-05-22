@@ -5,6 +5,7 @@ import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.entities.EstadoOrden;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
+import com.ybc.orden.repositories.UsuarioRepository;
 import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.EstadoOrdenServiceImpl;
@@ -68,6 +69,8 @@ public class MainFrame extends javax.swing.JFrame {
     private Estado estado;
     @Autowired
     private EstadoOrdenServiceImpl estadoOrdenService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public MainFrame() {
         initComponents();
@@ -159,7 +162,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         DefaultTableModel modelUsuarios = (DefaultTableModel) tablaUsuarios.getModel();
         List<Usuario> datosUsuarios = StreamSupport
-                .stream(usuarioService.findAll().spliterator(), false)
+                .stream(usuarioRepository.findByTecnico(true).spliterator(), false)
                 .collect(Collectors.toList());
         modelUsuarios.setNumRows(0);
 
