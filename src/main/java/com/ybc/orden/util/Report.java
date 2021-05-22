@@ -14,6 +14,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,7 @@ public class Report {
             System.out.println(parametro);
             JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parametro, new JREmptyDataSource());
             JasperExportManager.exportReportToPdfFile(jasperPrint, destino.toString() + "/" + orden.getId() + "-original.pdf");
-
-            // JasperPrintManager.printReport(jasperPrint,false);
+            JasperPrintManager.printReport(jasperPrint,true);
         } catch (JRException ex) {
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -94,8 +94,7 @@ public class Report {
             System.out.println(parametro);
             JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parametro, new JREmptyDataSource());
             JasperExportManager.exportReportToPdfFile(jasperPrint, destino.toString() + "/" + orden.getId() + "-duplicado.pdf");
-
-            // JasperPrintManager.printReport(jasperPrint,false);
+            JasperPrintManager.printReport(jasperPrint,true);
         } catch (JRException ex) {
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
         }
