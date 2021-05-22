@@ -1,6 +1,7 @@
 package com.ybc.orden.views;
 
 import com.ybc.orden.entities.Equipo;
+import com.ybc.orden.entities.EstadoOrden;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
 import com.ybc.orden.services.EstadoOrdenServiceImpl;
@@ -109,6 +110,12 @@ public class AltaOrdenes extends javax.swing.JDialog {
                 .importe(txtImporte.getText())
                 .build();
         
+        EstadoOrden estadoOrden = EstadoOrden.builder()
+                .estado("Asignada")
+                .fecha(fecha.getTime())
+                .orden(orden)
+                .build();
+        
         
         
         cboEquipo.setSelectedIndex(0);
@@ -122,7 +129,8 @@ public class AltaOrdenes extends javax.swing.JDialog {
         txaDiagnostico.setText(null);
         txaSolucion.setText(null);
         
-        ordenService.save(orden);        
+        ordenService.save(orden);
+        estadoOrdenService.save(estadoOrden);
         Report report = new Report();
         report.OrdenDeTrabajo(orden);
         report.OrdenDeTrabajoDuplicado(orden);

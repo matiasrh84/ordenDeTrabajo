@@ -1,12 +1,14 @@
 package com.ybc.orden.util;
 
 import com.ybc.orden.entities.Orden;
+import java.awt.Image;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -16,23 +18,23 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
+public class Report {
 
-public class Report {       
-    
     @Autowired
     JasperReport reporte;
 
     public void OrdenDeTrabajo(Orden orden) {
-       Map parametro = new HashMap();
-        
+        Map parametro = new HashMap();
+        Image logo = new ImageIcon(getClass().getResource("/imagenes/tecnologic.png")).getImage();
+
         try {
-            
+
             Path destino = Paths.get("ordenDeTrabajo/Reportes/");
-            
+
             reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reportes/OrdenDeTrabajo.jasper"));
             parametro.put("idOrden", orden.getId());
             parametro.put("fecha", orden.getEntrada());
-            parametro.put("nombreCliente", orden.getEquipo().getCliente().getNombre()+" "+orden.getEquipo().getCliente().getApellido());
+            parametro.put("nombreCliente", orden.getEquipo().getCliente().getNombre() + " " + orden.getEquipo().getCliente().getApellido());
             parametro.put("direccion", orden.getEquipo().getCliente().getDireccion());
             parametro.put("telefono", orden.getEquipo().getCliente().getTelefono());
             parametro.put("email", orden.getEquipo().getCliente().getEmail());
@@ -45,32 +47,31 @@ public class Report {
             parametro.put("defectos", orden.getDefectosReportados());
             parametro.put("importe", orden.getImporte());
             parametro.put("condicion", orden.getCondicion());
-            parametro.put("tecnico", orden.getUsuario().getNombre()+" "+orden.getUsuario().getApellido());
+            parametro.put("tecnico", orden.getUsuario().getNombre() + " " + orden.getUsuario().getApellido());
             parametro.put("contacto", orden.getEquipo().getCliente().getContacto());
-            
+            parametro.put("logo", logo);
+
             System.out.println(parametro);
             JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parametro, new JREmptyDataSource());
-            JasperExportManager.exportReportToPdfFile(jasperPrint, destino.toString()+"/"+orden.getId()+"-original.pdf");
-            
-            
-            
-           // JasperPrintManager.printReport(jasperPrint,false);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, destino.toString() + "/" + orden.getId() + "-original.pdf");
+
+            // JasperPrintManager.printReport(jasperPrint,false);
         } catch (JRException ex) {
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void OrdenDeTrabajoDuplicado(Orden orden) {
-       Map parametro = new HashMap();
-        
+        Map parametro = new HashMap();
+        Image logo = new ImageIcon(getClass().getResource("/imagenes/tecnologic.png")).getImage();
         try {
-            
+
             Path destino = Paths.get("ordenDeTrabajo/Reportes/");
-            
+
             reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reportes/OrdenDeTrabajoDuplicado.jasper"));
             parametro.put("idOrden", orden.getId());
             parametro.put("fecha", orden.getEntrada());
-            parametro.put("nombreCliente", orden.getEquipo().getCliente().getNombre()+" "+orden.getEquipo().getCliente().getApellido());
+            parametro.put("nombreCliente", orden.getEquipo().getCliente().getNombre() + " " + orden.getEquipo().getCliente().getApellido());
             parametro.put("direccion", orden.getEquipo().getCliente().getDireccion());
             parametro.put("telefono", orden.getEquipo().getCliente().getTelefono());
             parametro.put("email", orden.getEquipo().getCliente().getEmail());
@@ -83,19 +84,18 @@ public class Report {
             parametro.put("defectos", orden.getDefectosReportados());
             parametro.put("importe", orden.getImporte());
             parametro.put("condicion", orden.getCondicion());
-            parametro.put("tecnico", orden.getUsuario().getNombre()+" "+orden.getUsuario().getApellido());
+            parametro.put("tecnico", orden.getUsuario().getNombre() + " " + orden.getUsuario().getApellido());
             parametro.put("contacto", orden.getEquipo().getCliente().getContacto());
-            parametro.put("configuracion",orden.getConfiguracionEquipo());
+            parametro.put("configuracion", orden.getConfiguracionEquipo());
             parametro.put("diagnostico", orden.getDiagnostico());
             parametro.put("solucion", orden.getSolucion());
-            
+            parametro.put("logo", logo);
+
             System.out.println(parametro);
             JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parametro, new JREmptyDataSource());
-            JasperExportManager.exportReportToPdfFile(jasperPrint, destino.toString()+"/"+orden.getId()+"-duplicado.pdf");
-            
-            
-            
-           // JasperPrintManager.printReport(jasperPrint,false);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, destino.toString() + "/" + orden.getId() + "-duplicado.pdf");
+
+            // JasperPrintManager.printReport(jasperPrint,false);
         } catch (JRException ex) {
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
         }
