@@ -1,9 +1,7 @@
 package com.ybc.orden.views;
 
-import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
-import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
 import com.ybc.orden.services.UsuarioServiceImpl;
 import com.ybc.orden.util.Report;
@@ -23,17 +21,15 @@ public class ModificaOrdenes extends javax.swing.JDialog {
     
     int x;
     int y;
+    public static int idCliente;
     
     @Autowired
-    private OrdenServiceImpl ordenService;
-    @Autowired
-    private EquipoServiceImpl equipoService;
-    @Autowired
-    private AltaEquipos abmEquipos;
+    private OrdenServiceImpl ordenService;        
     @Autowired
     private UsuarioServiceImpl usuarioService;
     @Autowired
-    private AltaUsuarios abmUsuarios;
+    private AltaUsuarios abmUsuarios;    
+    
     
     public ModificaOrdenes() {
         initComponents();
@@ -43,20 +39,7 @@ public class ModificaOrdenes extends javax.swing.JDialog {
         radioFacturar.setSelected(true);
 
     }
-
-    @PostConstruct
-    void cargarEquipos() {
-        abmEquipos.setModal(true);
-        List<Equipo> datosEquipos = StreamSupport
-                .stream(equipoService.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-        cboEquipo.removeAllItems();
-        for (Equipo equipo : datosEquipos) {
-            cboEquipo.addItem(equipo);
-        }
-        AutoCompleteDecorator.decorate(cboEquipo);
-
-    }
+    
 
     @PostConstruct
     void cargarUsuarios() {
@@ -86,9 +69,8 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                 radioFacturar.setSelected(true);
             } else {
                 radioGarantia.setSelected(true);
-            }
-            
-            cboEquipo.setSelectedItem(orden.getEquipo());
+            }           
+            lblEquipo.setText(ordenService.findById(idOrdenes).get().getEquipo().toString());
             txtAccesorios.setText(orden.getAccesoriosRecibidos());
             txtDetalle.setText(orden.getDetalle());
             txtDefectos.setText(orden.getDefectosReportados());
@@ -97,6 +79,8 @@ public class ModificaOrdenes extends javax.swing.JDialog {
             txaDiagnostico.setText(orden.getDiagnostico());
             txaSolucion.setText(orden.getSolucion());
             txtImporte.setText(orden.getImporte());
+            lblCliente.setText(orden.getEquipo().getCliente().toString());
+            idCliente = orden.getEquipo().getCliente().getId();
         }
     }
 
@@ -123,7 +107,7 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                 .entrada(fecha.getTime())
                 .lugar(lugar)
                 .condicion(condicion)
-                .equipo((Equipo) cboEquipo.getSelectedItem())
+                .equipo(ordenService.findById(idOrdenes).get().getEquipo())
                 .accesoriosRecibidos(txtAccesorios.getText())
                 .detalle(txtDetalle.getText())
                 .defectosReportados(txtDefectos.getText())
@@ -134,7 +118,8 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                 .importe(txtImporte.getText())
                 .build();
         
-        cboEquipo.setSelectedIndex(0);
+        lblEquipo.setText(null);
+        lblCliente.setText(null);
         cboUsuario.setSelectedIndex(0);
         radioTaller.setSelected(true);
         radioFacturar.setSelected(true);
@@ -181,10 +166,10 @@ public class ModificaOrdenes extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         txaSolucion = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
+        txtImporte = new RSMaterialComponent.RSTextFieldMaterial();
         radioTaller = new RSMaterialComponent.RSRadioButtonMaterial();
         radioDomicilio = new RSMaterialComponent.RSRadioButtonMaterial();
-        cboEquipo = new RSMaterialComponent.RSComboBoxMaterial();
-        btnAltaEquipo = new RSMaterialComponent.RSButtonMaterialIconTwo();
         jLabel5 = new javax.swing.JLabel();
         txtDetalle = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel6 = new javax.swing.JLabel();
@@ -195,8 +180,9 @@ public class ModificaOrdenes extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
         cboUsuario = new RSMaterialComponent.RSComboBoxMaterial();
         btnAltaUsuario = new RSMaterialComponent.RSButtonMaterialIconTwo();
-        jLabel12 = new javax.swing.JLabel();
-        txtImporte = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel3 = new javax.swing.JLabel();
+        lblCliente = new javax.swing.JLabel();
+        lblEquipo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -392,6 +378,16 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel12.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        jLabel12.setText("Importe:");
+
+        txtImporte.setBackground(new java.awt.Color(255, 255, 255));
+        txtImporte.setForeground(new java.awt.Color(0, 0, 0));
+        txtImporte.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtImporte.setPhColor(new java.awt.Color(51, 153, 255));
+        txtImporte.setPlaceholder("Ingrese el importe");
+        txtImporte.setSelectionColor(new java.awt.Color(51, 153, 255));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -403,13 +399,22 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                         .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -431,22 +436,6 @@ public class ModificaOrdenes extends javax.swing.JDialog {
         radioDomicilio.setColorCheck(new java.awt.Color(0, 153, 255));
         radioDomicilio.setColorUnCheck(new java.awt.Color(0, 153, 255));
         radioDomicilio.setRippleColor(new java.awt.Color(0, 153, 255));
-
-        cboEquipo.setColorMaterial(new java.awt.Color(0, 153, 255));
-
-        btnAltaEquipo.setBackground(new java.awt.Color(0, 153, 51));
-        btnAltaEquipo.setText("Alta equipo");
-        btnAltaEquipo.setBackgroundHover(new java.awt.Color(0, 102, 0));
-        btnAltaEquipo.setFont(new java.awt.Font("Roboto Bold", 1, 12)); // NOI18N
-        btnAltaEquipo.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
-        btnAltaEquipo.setMaximumSize(new java.awt.Dimension(75, 15));
-        btnAltaEquipo.setMinimumSize(new java.awt.Dimension(75, 15));
-        btnAltaEquipo.setRound(10);
-        btnAltaEquipo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAltaEquipoActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         jLabel5.setText("Detalle de orden:");
@@ -502,15 +491,14 @@ public class ModificaOrdenes extends javax.swing.JDialog {
             }
         });
 
-        jLabel12.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
-        jLabel12.setText("Importe:");
+        jLabel3.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        jLabel3.setText("Cliente:");
 
-        txtImporte.setBackground(new java.awt.Color(255, 255, 255));
-        txtImporte.setForeground(new java.awt.Color(0, 0, 0));
-        txtImporte.setColorMaterial(new java.awt.Color(51, 153, 255));
-        txtImporte.setPhColor(new java.awt.Color(51, 153, 255));
-        txtImporte.setPlaceholder("Ingrese el importe");
-        txtImporte.setSelectionColor(new java.awt.Color(51, 153, 255));
+        lblCliente.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        lblCliente.setForeground(new java.awt.Color(153, 0, 0));
+
+        lblEquipo.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        lblEquipo.setForeground(new java.awt.Color(153, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -521,54 +509,58 @@ public class ModificaOrdenes extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(127, 127, 127)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(radioTaller, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(radioDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(radioFacturar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(radioGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(196, 196, 196)
-                        .addComponent(cboEquipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(30, 30, 30)
-                        .addComponent(btnAltaEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel11))
+                            .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtAccesorios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtDetalle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDefectos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAltaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel12)
+                            .addComponent(txtDefectos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAltaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(115, 115, 115)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel1))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(20, 20, 20)
+                                        .addComponent(radioTaller, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(radioDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(radioFacturar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(radioGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioTaller, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(radioDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -576,14 +568,15 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                     .addComponent(radioFacturar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
                     .addComponent(radioGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAltaEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel2))
-                    .addComponent(cboEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                    .addComponent(lblEquipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtAccesorios, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -600,12 +593,9 @@ public class ModificaOrdenes extends javax.swing.JDialog {
                     .addComponent(jLabel11)
                     .addComponent(cboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAltaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -640,13 +630,6 @@ public class ModificaOrdenes extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnAltaEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaEquipoActionPerformed
-
-        abmEquipos.setVisible(true);
-        cargarEquipos();
-
-    }//GEN-LAST:event_btnAltaEquipoActionPerformed
-
     private void btnAltaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaUsuarioActionPerformed
 
         abmUsuarios.setVisible(true);
@@ -670,10 +653,8 @@ public class ModificaOrdenes extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAceptar;
-    private RSMaterialComponent.RSButtonMaterialIconTwo btnAltaEquipo;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAltaUsuario;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnCancelar;
-    private RSMaterialComponent.RSComboBoxMaterial cboEquipo;
     private RSMaterialComponent.RSComboBoxMaterial cboUsuario;
     private javax.swing.ButtonGroup grupoCondicion;
     private javax.swing.ButtonGroup grupoLugarAtencion;
@@ -682,6 +663,7 @@ public class ModificaOrdenes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -695,6 +677,8 @@ public class ModificaOrdenes extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblEquipo;
     private RSMaterialComponent.RSButtonIconOne rSButtonIconOne1;
     private RSMaterialComponent.RSLabelTextIcon rSLabelTextIcon1;
     private RSMaterialComponent.RSRadioButtonMaterial radioDomicilio;

@@ -5,7 +5,6 @@ import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.entities.EstadoOrden;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
-import com.ybc.orden.repositories.UsuarioRepository;
 import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.EstadoOrdenServiceImpl;
@@ -13,6 +12,7 @@ import com.ybc.orden.services.OrdenServiceImpl;
 import com.ybc.orden.services.UsuarioServiceImpl;
 import com.ybc.orden.util.Report;
 import java.awt.Color;
+import static java.awt.Frame.ICONIFIED;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +39,12 @@ public class MainFrame extends javax.swing.JFrame {
     static int idOrdenes;
     static int idEstado;
     public String usuario;
+    public static int idUsuario;
     DefaultTableModel modelOrdenes;
+    DefaultTableModel modelClientes;
+    DefaultTableModel modelEquipos;
+    DefaultTableModel modelUsuarios;
+    SimpleDateFormat dateFormat;
 
     @Autowired
     private ClienteServiceImpl clienteService;
@@ -69,8 +74,7 @@ public class MainFrame extends javax.swing.JFrame {
     private Estado estado;
     @Autowired
     private EstadoOrdenServiceImpl estadoOrdenService;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    
 
     public MainFrame() {
         initComponents();
@@ -81,7 +85,7 @@ public class MainFrame extends javax.swing.JFrame {
         panelEquipos.setVisible(false);
         panelUsuarios.setVisible(false);
         txtBuscar.requestFocus();
-
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     }
 
     @PostConstruct
@@ -94,12 +98,11 @@ public class MainFrame extends javax.swing.JFrame {
         estado.setModal(true);
         modificaClientes.setModal(true);
         modificaEquipos.setModal(true);
-        modificaUsuarios.setModal(true);
+        modificaUsuarios.setModal(true);        
     }
 
     @PostConstruct
     public void cargarTablaOrdenes() {
-        SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
         modelOrdenes = (DefaultTableModel) tablaOrdenes.getModel();
         List<EstadoOrden> datosOrdenes = StreamSupport
                 .stream(estadoOrdenService.findAll().spliterator(), false)
@@ -107,29 +110,48 @@ public class MainFrame extends javax.swing.JFrame {
         modelOrdenes.setNumRows(0);
 
         for (EstadoOrden datos : datosOrdenes) {
-            Object[] fila = {datos.getOrden().getId(), datos.getFecha(), datos.getOrden().getEquipo(), datos.getOrden().getEquipo().getCliente().toString(), datos.getOrden().getUsuario().toString(), datos.getEstado(), datos.getId()};
-            System.out.println(datos);
+            Object[] fila = {datos.getOrden().getId(), dateFormat.format(datos.getFecha()), datos.getOrden().getEquipo(), datos.getOrden().getEquipo().getCliente().toString(), datos.getOrden().getUsuario().toString(), datos.getEstado(), datos.getId(), datos.getOrden().getUsuario().getId()};
             modelOrdenes.addRow(fila);
         }
-        tablaOrdenes.getColumnModel().getColumn(0).setMaxWidth(0);
-        tablaOrdenes.getColumnModel().getColumn(0).setMinWidth(0);
-        tablaOrdenes.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+        tablaOrdenes.getColumnModel().getColumn(0).setMaxWidth(70);
+        tablaOrdenes.getColumnModel().getColumn(0).setMinWidth(70);
+        tablaOrdenes.getColumnModel().getColumn(0).setPreferredWidth(70);
+
+        tablaOrdenes.getColumnModel().getColumn(1).setMaxWidth(90);
+        tablaOrdenes.getColumnModel().getColumn(1).setMinWidth(90);
+        tablaOrdenes.getColumnModel().getColumn(1).setPreferredWidth(90);
+
+        tablaOrdenes.getColumnModel().getColumn(3).setMaxWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(3).setMinWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(3).setPreferredWidth(140);
+
+        tablaOrdenes.getColumnModel().getColumn(4).setMaxWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(4).setMinWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(4).setPreferredWidth(140);
+
+        tablaOrdenes.getColumnModel().getColumn(5).setMaxWidth(80);
+        tablaOrdenes.getColumnModel().getColumn(5).setMinWidth(80);
+        tablaOrdenes.getColumnModel().getColumn(5).setPreferredWidth(80);
+
         tablaOrdenes.getColumnModel().getColumn(6).setMaxWidth(0);
         tablaOrdenes.getColumnModel().getColumn(6).setMinWidth(0);
         tablaOrdenes.getColumnModel().getColumn(6).setPreferredWidth(0);
-
+        tablaOrdenes.getColumnModel().getColumn(7).setMaxWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(7).setMinWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(7).setPreferredWidth(0);
     }
 
     public void cargarTablaClientes() {
 
-        DefaultTableModel modelClientes = (DefaultTableModel) tablaClientes.getModel();
+        modelClientes = (DefaultTableModel) tablaClientes.getModel();
         List<Cliente> datosClientes = StreamSupport
                 .stream(clienteService.findAll().spliterator(), false)
                 .collect(Collectors.toList());
         modelClientes.setNumRows(0);
 
         for (Cliente datos : datosClientes) {
-            Object[] fila = {datos.getId(), datos.getApellido(), datos.getNombre(), datos.getCuit()};
+            Object[] fila = {datos.getId(), datos.getApellido(), datos.getNombre(), datos.getCuit(), datos.getEstado()};
             modelClientes.addRow(fila);
         }
 
@@ -141,14 +163,14 @@ public class MainFrame extends javax.swing.JFrame {
 
     public void cargarTablaEquipos() {
 
-        DefaultTableModel modelEquipos = (DefaultTableModel) tablaEquipos.getModel();
+        modelEquipos = (DefaultTableModel) tablaEquipos.getModel();
         List<Equipo> datosEquipos = StreamSupport
                 .stream(equipoService.findAll().spliterator(), false)
                 .collect(Collectors.toList());
         modelEquipos.setNumRows(0);
 
         for (Equipo datos : datosEquipos) {
-            Object[] fila = {datos.getId(), datos.getMarca(), datos.getModelo(), datos.getCliente().getApellido() + ", " + datos.getCliente().getNombre()};
+            Object[] fila = {datos.getId(), datos.getMarca(), datos.getModelo(), datos.getCliente().getApellido() + ", " + datos.getCliente().getNombre(), datos.getEstado()};
             modelEquipos.addRow(fila);
         }
 
@@ -160,9 +182,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     public void cargarTablaUsuarios() {
 
-        DefaultTableModel modelUsuarios = (DefaultTableModel) tablaUsuarios.getModel();
+        modelUsuarios = (DefaultTableModel) tablaUsuarios.getModel();
         List<Usuario> datosUsuarios = StreamSupport
-                .stream(usuarioRepository.findByTecnico(true).spliterator(), false)
+                .stream(usuarioService.findAll().spliterator(), false)
                 .collect(Collectors.toList());
         modelUsuarios.setNumRows(0);
 
@@ -200,6 +222,18 @@ public class MainFrame extends javax.swing.JFrame {
         modificaOrdenes.setVisible(true);
         cargarTablaOrdenes();
     }
+    
+    void bajaCliente (int id) {
+        Cliente cliente = clienteService.findById(id).get();
+        cliente.setEstado(false);        
+        clienteService.save(cliente);
+    }
+    
+    void bajaEquipo (int id) {
+        Equipo equipo = equipoService.findById(id).get();
+        equipo.setEstado(false);        
+        equipoService.save(equipo);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -229,23 +263,32 @@ public class MainFrame extends javax.swing.JFrame {
         panelTablaClientes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaClientes = new RSMaterialComponent.RSTableMetro();
+        txtBuscarCliente = new RSMaterialComponent.RSTextFieldMaterial();
+        rSLabelIcon3 = new RSMaterialComponent.RSLabelIcon();
         btnModificarCliente = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnNuevoCliente = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnNuevoCliente1 = new RSMaterialComponent.RSButtonMaterialIconOne();
         panelEquipos = new javax.swing.JPanel();
         panelTablaEquipos = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaEquipos = new RSMaterialComponent.RSTableMetro();
+        txtBuscarEquipo = new RSMaterialComponent.RSTextFieldMaterial();
+        rSLabelIcon4 = new RSMaterialComponent.RSLabelIcon();
         btnNuevoEquipo = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnModificarEquipo = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnBajaEquipo = new RSMaterialComponent.RSButtonMaterialIconOne();
         panelUsuarios = new javax.swing.JPanel();
         panelTablaUsuarios = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tablaUsuarios = new RSMaterialComponent.RSTableMetro();
+        rSLabelIcon5 = new RSMaterialComponent.RSLabelIcon();
+        txtBuscarUsuario = new RSMaterialComponent.RSTextFieldMaterial();
         btnNuevoUsuario = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnModificarUsuario = new RSMaterialComponent.RSButtonMaterialIconOne();
         panelBotonCerrar = new javax.swing.JPanel();
         btnCerrar = new RSMaterialComponent.RSButtonIconOne();
         jLabel2 = new javax.swing.JLabel();
+        btnCerrar1 = new RSMaterialComponent.RSButtonIconOne();
         jLabel1 = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -401,11 +444,11 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Fecha", "Equipo", "Cliente", "Técnico", "Estado", "idEstado"
+                "Número", "Fecha", "Equipo", "Cliente", "Técnico", "Estado", "idEstado", "idUsuario"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -474,7 +517,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnModificarOrden.setBackgroundHover(new java.awt.Color(102, 102, 102));
         btnModificarOrden.setForegroundText(new java.awt.Color(51, 153, 255));
         btnModificarOrden.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnModificarOrden.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MOUSE);
+        btnModificarOrden.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MODE_EDIT);
         btnModificarOrden.setRound(20);
         btnModificarOrden.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -559,14 +602,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Apellido", "Nombre", "CUIT"
+                "Id", "Apellido", "Nombre", "CUIT", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -591,20 +634,46 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tablaClientes);
 
+        txtBuscarCliente.setBackground(new java.awt.Color(255, 255, 255));
+        txtBuscarCliente.setForeground(new java.awt.Color(0, 0, 0));
+        txtBuscarCliente.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtBuscarCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtBuscarCliente.setPhColor(new java.awt.Color(0, 0, 0));
+        txtBuscarCliente.setPlaceholder("Buscar");
+        txtBuscarCliente.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtBuscarCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarClienteKeyReleased(evt);
+            }
+        });
+
+        rSLabelIcon3.setForeground(new java.awt.Color(255, 255, 255));
+        rSLabelIcon3.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+
         javax.swing.GroupLayout panelTablaClientesLayout = new javax.swing.GroupLayout(panelTablaClientes);
         panelTablaClientes.setLayout(panelTablaClientesLayout);
         panelTablaClientesLayout.setHorizontalGroup(
             panelTablaClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTablaClientesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3)
+                .addGroup(panelTablaClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                    .addGroup(panelTablaClientesLayout.createSequentialGroup()
+                        .addComponent(rSLabelIcon3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelTablaClientesLayout.setVerticalGroup(
             panelTablaClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTablaClientesLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTablaClientesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                .addGroup(panelTablaClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rSLabelIcon3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -613,7 +682,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnModificarCliente.setBackgroundHover(new java.awt.Color(102, 102, 102));
         btnModificarCliente.setForegroundText(new java.awt.Color(51, 153, 255));
         btnModificarCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnModificarCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MOUSE);
+        btnModificarCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MODE_EDIT);
         btnModificarCliente.setRound(20);
         btnModificarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -633,6 +702,18 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnNuevoCliente1.setBackground(new java.awt.Color(255, 51, 51));
+        btnNuevoCliente1.setText("Dar de baja cliente");
+        btnNuevoCliente1.setBackgroundHover(new java.awt.Color(153, 0, 0));
+        btnNuevoCliente1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnNuevoCliente1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.REMOVE);
+        btnNuevoCliente1.setRound(20);
+        btnNuevoCliente1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoCliente1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelClientesLayout = new javax.swing.GroupLayout(panelClientes);
         panelClientes.setLayout(panelClientesLayout);
         panelClientesLayout.setHorizontalGroup(
@@ -640,7 +721,9 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panelClientesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btnNuevoCliente1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnModificarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(panelTablaClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -652,7 +735,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModificarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnModificarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnNuevoCliente1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -668,11 +752,11 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Marca", "Modelo", "Cliente"
+                "Id", "Marca", "Modelo", "Cliente", "Estado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -693,20 +777,46 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tablaEquipos);
 
+        txtBuscarEquipo.setBackground(new java.awt.Color(255, 255, 255));
+        txtBuscarEquipo.setForeground(new java.awt.Color(0, 0, 0));
+        txtBuscarEquipo.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtBuscarEquipo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtBuscarEquipo.setPhColor(new java.awt.Color(0, 0, 0));
+        txtBuscarEquipo.setPlaceholder("Buscar");
+        txtBuscarEquipo.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtBuscarEquipo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarEquipoKeyReleased(evt);
+            }
+        });
+
+        rSLabelIcon4.setForeground(new java.awt.Color(255, 255, 255));
+        rSLabelIcon4.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+
         javax.swing.GroupLayout panelTablaEquiposLayout = new javax.swing.GroupLayout(panelTablaEquipos);
         panelTablaEquipos.setLayout(panelTablaEquiposLayout);
         panelTablaEquiposLayout.setHorizontalGroup(
             panelTablaEquiposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTablaEquiposLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addGroup(panelTablaEquiposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                    .addGroup(panelTablaEquiposLayout.createSequentialGroup()
+                        .addComponent(rSLabelIcon4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelTablaEquiposLayout.setVerticalGroup(
             panelTablaEquiposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTablaEquiposLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTablaEquiposLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                .addGroup(panelTablaEquiposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtBuscarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rSLabelIcon4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -727,11 +837,23 @@ public class MainFrame extends javax.swing.JFrame {
         btnModificarEquipo.setBackgroundHover(new java.awt.Color(102, 102, 102));
         btnModificarEquipo.setForegroundText(new java.awt.Color(51, 153, 255));
         btnModificarEquipo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnModificarEquipo.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MOUSE);
+        btnModificarEquipo.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MODE_EDIT);
         btnModificarEquipo.setRound(20);
         btnModificarEquipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarEquipoActionPerformed(evt);
+            }
+        });
+
+        btnBajaEquipo.setBackground(new java.awt.Color(255, 51, 51));
+        btnBajaEquipo.setText("Baja equipo");
+        btnBajaEquipo.setBackgroundHover(new java.awt.Color(153, 0, 0));
+        btnBajaEquipo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnBajaEquipo.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.REMOVE);
+        btnBajaEquipo.setRound(20);
+        btnBajaEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBajaEquipoActionPerformed(evt);
             }
         });
 
@@ -742,7 +864,9 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panelEquiposLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNuevoEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btnBajaEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnModificarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(panelTablaEquipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -754,7 +878,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelEquiposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnModificarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNuevoEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnNuevoEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBajaEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -802,20 +927,46 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jScrollPane4.setViewportView(tablaUsuarios);
 
+        rSLabelIcon5.setForeground(new java.awt.Color(255, 255, 255));
+        rSLabelIcon5.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+
+        txtBuscarUsuario.setBackground(new java.awt.Color(255, 255, 255));
+        txtBuscarUsuario.setForeground(new java.awt.Color(0, 0, 0));
+        txtBuscarUsuario.setColorMaterial(new java.awt.Color(51, 153, 255));
+        txtBuscarUsuario.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtBuscarUsuario.setPhColor(new java.awt.Color(0, 0, 0));
+        txtBuscarUsuario.setPlaceholder("Buscar");
+        txtBuscarUsuario.setSelectionColor(new java.awt.Color(51, 153, 255));
+        txtBuscarUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarUsuarioKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelTablaUsuariosLayout = new javax.swing.GroupLayout(panelTablaUsuarios);
         panelTablaUsuarios.setLayout(panelTablaUsuariosLayout);
         panelTablaUsuariosLayout.setHorizontalGroup(
             panelTablaUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTablaUsuariosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4)
+                .addGroup(panelTablaUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addGroup(panelTablaUsuariosLayout.createSequentialGroup()
+                        .addComponent(rSLabelIcon5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelTablaUsuariosLayout.setVerticalGroup(
             panelTablaUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTablaUsuariosLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTablaUsuariosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                .addGroup(panelTablaUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtBuscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rSLabelIcon5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -837,7 +988,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnModificarUsuario.setBackgroundHover(new java.awt.Color(102, 102, 102));
         btnModificarUsuario.setForegroundText(new java.awt.Color(51, 153, 255));
         btnModificarUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnModificarUsuario.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MOUSE);
+        btnModificarUsuario.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MODE_EDIT);
         btnModificarUsuario.setRound(20);
         btnModificarUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -900,6 +1051,18 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("YBG órdenes de trabajo");
 
+        btnCerrar1.setBackground(new java.awt.Color(255, 255, 255));
+        btnCerrar1.setForeground(new java.awt.Color(51, 153, 255));
+        btnCerrar1.setBackgroundHover(new java.awt.Color(0, 102, 204));
+        btnCerrar1.setForegroundText(new java.awt.Color(51, 153, 255));
+        btnCerrar1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.REMOVE);
+        btnCerrar1.setSizeIcon(20.0F);
+        btnCerrar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBotonCerrarLayout = new javax.swing.GroupLayout(panelBotonCerrar);
         panelBotonCerrar.setLayout(panelBotonCerrarLayout);
         panelBotonCerrarLayout.setHorizontalGroup(
@@ -908,6 +1071,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCerrar1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
                 .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -919,7 +1084,11 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(panelBotonCerrarLayout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
                         .addGap(10, 10, 10))
-                    .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelBotonCerrarLayout.createSequentialGroup()
+                        .addGroup(panelBotonCerrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCerrar1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -1073,13 +1242,17 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
             idOrdenes = orden.get().getId();
+            Optional<Cliente> cliente = clienteService.findById(orden.get().getEquipo().getCliente().getId());
+            idClientes = cliente.get().getId();
             modificarOrden();
         }
 
     }//GEN-LAST:event_btnModificarOrdenActionPerformed
 
     private void btnNuevaOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaOrdenActionPerformed
-
+        
+        altaOrdenes.cargarUsuarios();
+        altaOrdenes.cargarEquipos();
         altaOrdenes.setVisible(true);
         cargarTablaOrdenes();
 
@@ -1087,10 +1260,15 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevaOrdenActionPerformed
 
     private void btnModificarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarClienteActionPerformed
-
-        altaClientes.setVisible(true);
-        cargarTablaClientes();
-
+        
+        if (tablaClientes.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente");
+        } else {
+            Optional<Cliente> cliente = clienteService.findById(Integer.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString()));
+            idClientes = cliente.get().getId();
+            modificarCliente();
+        }
+        
     }//GEN-LAST:event_btnModificarClienteActionPerformed
 
     private void btnNuevoEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEquipoActionPerformed
@@ -1116,8 +1294,14 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnModificarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarUsuarioActionPerformed
 
-        altaUsuarios.setVisible(true);
-        cargarTablaUsuarios();
+        if (tablaUsuarios.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un usuario");
+        } else {
+            Optional<Usuario> usuarioObject = usuarioService.findById(Integer.valueOf(tablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 0).toString()));
+            idUsuarios = usuarioObject.get().getId();
+            modificarUsuario();
+            cargarTablaUsuarios();
+        }
 
     }//GEN-LAST:event_btnModificarUsuarioActionPerformed
 
@@ -1153,7 +1337,6 @@ public class MainFrame extends javax.swing.JFrame {
             Optional<Cliente> cliente = clienteService.findById(Integer.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString()));
             idClientes = cliente.get().getId();
             modificarCliente();
-
         }
 
     }//GEN-LAST:event_tablaClientesMouseClicked
@@ -1172,10 +1355,11 @@ public class MainFrame extends javax.swing.JFrame {
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
 
         if (evt.getClickCount() == 2) {
-            Optional<Usuario> usuario = usuarioService.findById(Integer.valueOf(tablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 0).toString()));
-            idUsuarios = usuario.get().getId();
-            modificarUsuario();
-
+            if (usuarioService.findById(idUsuario).get().getPermisos() == 0) {
+                Optional<Usuario> usuarioObject = usuarioService.findById(Integer.valueOf(tablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 0).toString()));
+                idUsuarios = usuarioObject.get().getId();
+                modificarUsuario();
+            }
         }
 
     }//GEN-LAST:event_tablaUsuariosMouseClicked
@@ -1196,12 +1380,14 @@ public class MainFrame extends javax.swing.JFrame {
         if (tablaOrdenes.getSelectedRow() < 0) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar una orden");
         } else {
-            idEstado = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 6).toString());
-            idOrdenes = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString());
-            System.out.println(idEstado);
-            System.out.println(idOrdenes);
-            estado.setVisible(true);
-            cargarTablaOrdenes();
+            if ((idUsuario == Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 7).toString())) || (usuarioService.findById(idUsuario).get().getPermisos() == 0)) {
+                idEstado = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 6).toString());
+                idOrdenes = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString());
+                estado.setVisible(true);
+                cargarTablaOrdenes();
+            } else {
+                JOptionPane.showMessageDialog(null, "Esta orden no puede ser modificada por este usuario");
+            }
         }
 
     }//GEN-LAST:event_btnNuevaOrden1ActionPerformed
@@ -1213,8 +1399,7 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
             Report report = new Report();
-            report.OrdenDeTrabajo(orden.get());
-            report.OrdenDeTrabajoDuplicado(orden.get());
+            report.imprimirReportes(report.OrdenDeTrabajo(orden.get()), report.OrdenDeTrabajoDuplicado(orden.get()), orden.get());
         }
 
 
@@ -1223,26 +1408,85 @@ public class MainFrame extends javax.swing.JFrame {
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
 
         TableRowSorter sorter = new TableRowSorter(modelOrdenes);
-            sorter.setRowFilter(RowFilter.regexFilter(".*" + txtBuscar.getText() + ".*"));
-            tablaOrdenes.setRowSorter(sorter);
-        
+        sorter.setRowFilter(RowFilter.regexFilter(".*" + txtBuscar.getText() + ".*"));
+        tablaOrdenes.setRowSorter(sorter);
+
     }//GEN-LAST:event_txtBuscarKeyReleased
+
+    private void txtBuscarClienteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarClienteKeyReleased
+
+        TableRowSorter sorter = new TableRowSorter(modelClientes);
+        sorter.setRowFilter(RowFilter.regexFilter(".*" + txtBuscarCliente.getText() + ".*"));
+        tablaClientes.setRowSorter(sorter);
+
+    }//GEN-LAST:event_txtBuscarClienteKeyReleased
+
+    private void txtBuscarEquipoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarEquipoKeyReleased
+
+        TableRowSorter sorter = new TableRowSorter(modelEquipos);
+        sorter.setRowFilter(RowFilter.regexFilter(".*" + txtBuscarEquipo.getText() + ".*"));
+        tablaEquipos.setRowSorter(sorter);
+
+    }//GEN-LAST:event_txtBuscarEquipoKeyReleased
+
+    private void txtBuscarUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarUsuarioKeyReleased
+
+        TableRowSorter sorter = new TableRowSorter(modelUsuarios);
+        sorter.setRowFilter(RowFilter.regexFilter(".*" + txtBuscarUsuario.getText() + ".*"));
+        tablaUsuarios.setRowSorter(sorter);
+
+    }//GEN-LAST:event_txtBuscarUsuarioKeyReleased
+
+    private void btnCerrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrar1ActionPerformed
+
+        this.setExtendedState(ICONIFIED);
+
+    }//GEN-LAST:event_btnCerrar1ActionPerformed
+
+    private void btnNuevoCliente1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoCliente1ActionPerformed
+
+        if (tablaClientes.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente");
+        } else {
+            Optional<Cliente> cliente = clienteService.findById(Integer.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString()));
+            idClientes = cliente.get().getId();
+            bajaCliente(idClientes);
+            cargarTablaClientes();
+        }
+        
+    }//GEN-LAST:event_btnNuevoCliente1ActionPerformed
+
+    private void btnBajaEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaEquipoActionPerformed
+
+    if (tablaEquipos.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente");
+        } else {
+            Optional<Equipo> equipo = equipoService.findById(Integer.valueOf(tablaEquipos.getValueAt(tablaEquipos.getSelectedRow(), 0).toString()));
+            idEquipos = equipo.get().getId();
+            bajaEquipo(idEquipos);
+            cargarTablaEquipos();
+        }
+        
+    }//GEN-LAST:event_btnBajaEquipoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSButtonMaterialIconOne btnBajaEquipo;
     private RSMaterialComponent.RSButtonIconOne btnCerrar;
+    private RSMaterialComponent.RSButtonIconOne btnCerrar1;
     private RSMaterialComponent.RSButtonMaterialIconOne btnClientes;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEquipos;
     private RSMaterialComponent.RSButtonMaterialIconOne btnModificarCliente;
     private RSMaterialComponent.RSButtonMaterialIconOne btnModificarEquipo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnModificarOrden;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnModificarUsuario;
+    public static RSMaterialComponent.RSButtonMaterialIconOne btnModificarUsuario;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevaOrden;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevaOrden1;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevaOrden2;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevoCliente;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnNuevoCliente1;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevoEquipo;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnNuevoUsuario;
+    public static RSMaterialComponent.RSButtonMaterialIconOne btnNuevoUsuario;
     private RSMaterialComponent.RSButtonMaterialIconOne btnOrdenes;
     private RSMaterialComponent.RSButtonMaterialIconOne btnSalir;
     private RSMaterialComponent.RSButtonMaterialIconOne btnUsuarios;
@@ -1269,11 +1513,17 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel panelUsuarios;
     private RSMaterialComponent.RSLabelIcon rSLabelIcon1;
     private RSMaterialComponent.RSLabelIcon rSLabelIcon2;
+    private RSMaterialComponent.RSLabelIcon rSLabelIcon3;
+    private RSMaterialComponent.RSLabelIcon rSLabelIcon4;
+    private RSMaterialComponent.RSLabelIcon rSLabelIcon5;
     private RSMaterialComponent.RSTableMetro tablaClientes;
     private RSMaterialComponent.RSTableMetro tablaEquipos;
     public static RSMaterialComponent.RSTableMetro tablaOrdenes;
     private RSMaterialComponent.RSTableMetro tablaUsuarios;
     private RSMaterialComponent.RSTextFieldMaterial txtBuscar;
+    private RSMaterialComponent.RSTextFieldMaterial txtBuscarCliente;
+    private RSMaterialComponent.RSTextFieldMaterial txtBuscarEquipo;
+    private RSMaterialComponent.RSTextFieldMaterial txtBuscarUsuario;
     // End of variables declaration//GEN-END:variables
 
 }

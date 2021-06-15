@@ -30,6 +30,8 @@ public class Usuario implements Serializable {
     private String usuario;
     private String clave;
     private boolean tecnico;
+    private int permisos;
+    private boolean estado;
     
     
     @Override public String toString() {

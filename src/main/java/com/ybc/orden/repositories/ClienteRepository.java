@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
     Optional<Cliente> findByCuitAndApellido(String cuit, String apellido);
+    Iterable<Cliente> findByEstado(boolean estado);
+    Optional<Cliente> findByCuit(String cuit);
 }

@@ -1,6 +1,7 @@
 package com.ybc.orden.views;
 
 import com.ybc.orden.entities.Usuario;
+import com.ybc.orden.repositories.UsuarioRepository;
 import com.ybc.orden.services.UsuarioServiceImpl;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AltaUsuarios extends javax.swing.JDialog {
-    
+
     int x;
     int y;
 
     @Autowired
     private UsuarioServiceImpl usuarioService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public AltaUsuarios() {
         initComponents();
@@ -22,43 +25,65 @@ public class AltaUsuarios extends javax.swing.JDialog {
         setResizable(false);
         radioSi.setSelected(true);
     }
-    
+
     void aplicarCambios() {
+        if(!usuarioRepository.findByUsuario(txtUsuario.getText()).isPresent()) {
         if (Arrays.equals(txtContraseña.getPassword(), txtRepiteContraseña.getPassword())) {
 
             String pass = "";
-            boolean tecnico=false;
+            int permisos;
+            boolean tecnico = false;
             char[] password = txtContraseña.getPassword();
             for (int i = 0; i < password.length; i++) {
                 pass += password[i];
             }
-            if(!pass.equals("")){
-            if(radioSi.isSelected()) {
-                tecnico = true;
-            }
-            Usuario usuario = Usuario.builder()
-                    .apellido(txtApellido.getText())
-                    .nombre(txtNombre.getText())
-                    .dni(Integer.parseInt(txtDni.getText()))
-                    .usuario(txtUsuario.getText())
-                    .clave(pass)
-                    .tecnico(tecnico)
-                    .build();
-            
-            txtApellido.setText(null);
-            txtNombre.setText(null);
-            txtDni.setText(null);
-            txtUsuario.setText(null);
-            txtContraseña.setText(null);
-            txtRepiteContraseña.setText(null);
+            if (!pass.equals("")) {
+                if (radioSi.isSelected()) {
+                    tecnico = true;
+                }
+                switch (cboPermisos.getSelectedItem().toString()) {
 
-            usuarioService.save(usuario);
-            dispose();
+                    case "Administrador":
+                        permisos = 0;
+                        break;
+                    case "Rol":
+                        permisos = 1;
+                        break;
+                    case "Solo lectura":
+                        permisos = 2;
+                        break;
+                    default:
+                        permisos = 2;
+                        break;
+                }
+
+                Usuario usuario = Usuario.builder()
+                        .apellido(txtApellido.getText())
+                        .nombre(txtNombre.getText())
+                        .dni(Integer.parseInt(txtDni.getText()))
+                        .usuario(txtUsuario.getText())
+                        .clave(pass)
+                        .tecnico(tecnico)
+                        .permisos(permisos)
+                        .build();
+
+                txtApellido.setText(null);
+                txtNombre.setText(null);
+                txtDni.setText(null);
+                txtUsuario.setText(null);
+                txtContraseña.setText(null);
+                txtRepiteContraseña.setText(null);
+
+                usuarioService.save(usuario);
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
+        }
+        } else {
+            JOptionPane.showMessageDialog(null, "El nombre de usuario ya existe en la base de datos");
         }
     }
 
@@ -89,6 +114,8 @@ public class AltaUsuarios extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         radioSi = new RSMaterialComponent.RSRadioButtonMaterial();
         radioNo = new RSMaterialComponent.RSRadioButtonMaterial();
+        jLabel9 = new javax.swing.JLabel();
+        cboPermisos = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -276,6 +303,12 @@ public class AltaUsuarios extends javax.swing.JDialog {
         radioNo.setColorCheck(new java.awt.Color(51, 153, 255));
         radioNo.setColorUnCheck(new java.awt.Color(51, 153, 255));
 
+        jLabel9.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        jLabel9.setText("Permisos:");
+
+        cboPermisos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Solo lectura", "Rol", "Administrador" }));
+        cboPermisos.setColorMaterial(new java.awt.Color(0, 153, 255));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -296,7 +329,8 @@ public class AltaUsuarios extends javax.swing.JDialog {
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtRepiteContraseña, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -308,7 +342,8 @@ public class AltaUsuarios extends javax.swing.JDialog {
                                 .addComponent(radioSi, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(radioNo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(cboPermisos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -344,7 +379,14 @@ public class AltaUsuarios extends javax.swing.JDialog {
                     .addComponent(radioSi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
                     .addComponent(radioNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel9))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(cboPermisos, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -364,12 +406,12 @@ public class AltaUsuarios extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
 
-        if(txtApellido.getText().equals("") || txtNombre.getText().equals("") || txtDni.getText().equals("") || txtUsuario.getText().equals("")) {
+        if (txtApellido.getText().equals("") || txtNombre.getText().equals("") || txtDni.getText().equals("") || txtUsuario.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Debe completar los campos obligatorios");
         } else {
             aplicarCambios();
         }
-        
+
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void rSButtonIconOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonIconOne1ActionPerformed
@@ -390,26 +432,27 @@ public class AltaUsuarios extends javax.swing.JDialog {
         if (Character.isLetter(validate)) {
             evt.consume();
         }
-        
+
     }//GEN-LAST:event_txtDniKeyTyped
 
     private void jPanel2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseDragged
 
         this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
-        
+
     }//GEN-LAST:event_jPanel2MouseDragged
 
     private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
 
         x = evt.getX();
         y = evt.getY();
-        
+
     }//GEN-LAST:event_jPanel2MousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAceptar;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnCancelar;
+    private RSMaterialComponent.RSComboBoxMaterial cboPermisos;
     private javax.swing.ButtonGroup grupoTecnico;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -418,6 +461,7 @@ public class AltaUsuarios extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

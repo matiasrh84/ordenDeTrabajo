@@ -60,6 +60,7 @@ public class AltaEquipos extends javax.swing.JDialog {
                 .marca(txtMarca.getText())
                 .modelo(txtModelo.getText())
                 .numeroSerie(txtSerie.getText())
+                .estado(true)
                 .build();
 
         cboCliente.setSelectedIndex(0);
@@ -69,7 +70,7 @@ public class AltaEquipos extends javax.swing.JDialog {
         txtSerie.setText(null);
         txtTipo.setText(null);
         txtTipo.setEnabled(false);
-
+        
         equipoService.save(equipo);
         dispose();
     }

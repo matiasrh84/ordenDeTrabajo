@@ -74,6 +74,7 @@ public class ModificaEquipos extends javax.swing.JDialog {
                 .marca(txtMarca.getText())
                 .modelo(txtModelo.getText())
                 .numeroSerie(txtSerie.getText())
+                .estado(true)
                 .build();
 
         cboCliente.setSelectedIndex(0);

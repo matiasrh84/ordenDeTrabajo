@@ -1,6 +1,7 @@
 package com.ybc.orden.views;
 
 import com.ybc.orden.entities.Usuario;
+import com.ybc.orden.repositories.UsuarioRepository;
 import com.ybc.orden.services.UsuarioServiceImpl;
 import static com.ybc.orden.views.MainFrame.idUsuarios;
 import java.util.Arrays;
@@ -16,6 +17,8 @@ public class ModificaUsuarios extends javax.swing.JDialog {
 
     @Autowired
     private UsuarioServiceImpl usuarioService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public ModificaUsuarios() {
         initComponents();
@@ -42,9 +45,11 @@ public class ModificaUsuarios extends javax.swing.JDialog {
     }
     
     void aplicarCambios() {
+        if(usuarioRepository.findByUsuario(txtUsuario.getText()).get().getId()==idUsuarios) {
         if (Arrays.equals(txtContraseña.getPassword(), txtRepiteContraseña.getPassword())) {
 
             String pass = "";
+            int permisos;
             boolean tecnico=false;
             char[] password = txtContraseña.getPassword();
             for (int i = 0; i < password.length; i++) {
@@ -54,6 +59,23 @@ public class ModificaUsuarios extends javax.swing.JDialog {
             if(radioSi.isSelected()) {
                 tecnico = true;
             }
+            
+            switch (cboPermisos.getSelectedItem().toString()) {
+
+                    case "Administrador":
+                        permisos = 0;
+                        break;
+                    case "Rol":
+                        permisos = 1;
+                        break;
+                    case "Solo lectura":
+                        permisos = 2;
+                        break;
+                    default:
+                        permisos = 2;
+                        break;
+                }
+            
             Usuario usuario = Usuario.builder()
                     .id(idUsuarios)
                     .apellido(txtApellido.getText())
@@ -62,6 +84,7 @@ public class ModificaUsuarios extends javax.swing.JDialog {
                     .usuario(txtUsuario.getText())
                     .clave(pass)
                     .tecnico(tecnico)
+                    .permisos(permisos)
                     .build();
             
             txtApellido.setText(null);
@@ -78,6 +101,9 @@ public class ModificaUsuarios extends javax.swing.JDialog {
             }
         } else {
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
+        }
+    } else {
+            JOptionPane.showMessageDialog(null, "El nombre de usuario ya existe en la base de datos");
         }
     }
 
@@ -108,6 +134,8 @@ public class ModificaUsuarios extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         radioSi = new RSMaterialComponent.RSRadioButtonMaterial();
         radioNo = new RSMaterialComponent.RSRadioButtonMaterial();
+        jLabel9 = new javax.swing.JLabel();
+        cboPermisos = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -295,6 +323,12 @@ public class ModificaUsuarios extends javax.swing.JDialog {
         radioNo.setColorCheck(new java.awt.Color(51, 153, 255));
         radioNo.setColorUnCheck(new java.awt.Color(51, 153, 255));
 
+        jLabel9.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        jLabel9.setText("Permisos:");
+
+        cboPermisos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Solo lectura", "Rol", "Administrador" }));
+        cboPermisos.setColorMaterial(new java.awt.Color(0, 153, 255));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -327,7 +361,11 @@ public class ModificaUsuarios extends javax.swing.JDialog {
                                 .addComponent(radioSi, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(radioNo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cboPermisos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -363,6 +401,12 @@ public class ModificaUsuarios extends javax.swing.JDialog {
                     .addComponent(radioSi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
                     .addComponent(radioNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel9))
+                    .addComponent(cboPermisos, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -429,6 +473,7 @@ public class ModificaUsuarios extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAceptar;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnCancelar;
+    private RSMaterialComponent.RSComboBoxMaterial cboPermisos;
     private javax.swing.ButtonGroup grupoTecnico;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -437,6 +482,7 @@ public class ModificaUsuarios extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

@@ -54,7 +54,7 @@ public class Estado extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        cboEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Asignada", "Terminada", "Entregada" }));
+        cboEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Asignada", "Terminada", "Entregada", "Anulada" }));
         cboEstado.setColorMaterial(new java.awt.Color(0, 153, 255));
 
         btnAceptar.setBackground(new java.awt.Color(0, 153, 51));

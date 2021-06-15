@@ -2,6 +2,7 @@ package com.ybc.orden;
 
 import com.ybc.orden.repositories.UsuarioRepository;
 import com.ybc.orden.views.MainFrame;
+import static com.ybc.orden.views.MainFrame.idUsuario;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -31,12 +32,15 @@ public class Login extends javax.swing.JFrame {
         String[] allBeanNames = context.getBeanDefinitionNames();
         for (String beanName : allBeanNames) {
             System.out.println(beanName);
+            
         }
     }
 
     public static void main(String... args) throws Exception {
         context = new SpringApplicationBuilder(Login.class).headless(false).run(args);
         //displayAllBeans();        
+        System.out.println("Sistema operativo:"+System.getProperty("os.name"));
+        System.out.println("Separador:"+System.getProperty("file.separator"));
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Login login = context.getBean(Login.class);
@@ -62,8 +66,17 @@ public class Login extends javax.swing.JFrame {
                 login.setVisible(false);                
                 MainFrame mainFrame = context.getBean(MainFrame.class);
                 mainFrame.lblUsuario.setText(nombreUsuario);
+                idUsuario = usuarioRepo.findByUsuario(txtUsuario.getText()).get().getId();
                 mainFrame.setIconImage(new ImageIcon(getClass().getResource("/imagenes/icono.png")).getImage());
                 mainFrame.setVisible(true);
+                if(usuarioRepo.findById(idUsuario).get().getPermisos()==0) {
+                    MainFrame.btnNuevoUsuario.setEnabled(true);
+                    MainFrame.btnModificarUsuario.setEnabled(true);
+                }
+                else {
+                    MainFrame.btnNuevoUsuario.setEnabled(false);
+                    MainFrame.btnModificarUsuario.setEnabled(false);
+                }
 
             } else {
                 JOptionPane.showMessageDialog(null, "Usuario no registrado o contraseña incorrecta");

@@ -26,8 +26,7 @@
             <groupId>org.swinglabs.swingx</groupId>
             <artifactId>swingx-all</artifactId>
             <version>1.6.5-1</version>
-        </dependency>
-      
+        </dependency>      
         <dependency>
             <groupId>com.rsComponents</groupId>
             <artifactId>MaterialComponents</artifactId>

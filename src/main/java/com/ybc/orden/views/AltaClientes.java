@@ -1,6 +1,7 @@
 package com.ybc.orden.views;
 
 import com.ybc.orden.entities.Cliente;
+import com.ybc.orden.repositories.ClienteRepository;
 import com.ybc.orden.services.ClienteServiceImpl;
 import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,12 @@ public class AltaClientes extends javax.swing.JDialog {
     
     int x;
     int y;
-
+    
     @Autowired
     private ClienteServiceImpl clienteService;
-   
-
+    @Autowired
+    private ClienteRepository clienteRepo;
+    
     public AltaClientes() {
         initComponents();
         setLocationRelativeTo(null);
@@ -23,32 +25,33 @@ public class AltaClientes extends javax.swing.JDialog {
     }
     
     void aplicarCambios() {
-        if(/*!clienteRepo.findByCuit(txtCuit.getText()).isPresent()*/ true) {
-            Cliente cliente = Cliente.builder()                    
-                .apellido(txtApellido.getText())
-                .nombre(txtNombre.getText())
-                .cuit(txtCuit.getText())
-                .telefono(Long.parseLong(txtTelefono.getText()))
-                .direccion(txtDomicilio.getText())
-                .email(txtEmail.getText())
-                .condicionIva(txtIva.getText())
-                .contacto(txtContacto.getText())
-                .build();
-
-        txtApellido.setText(null);
-        txtNombre.setText(null);
-        txtCuit.setText(null);
-        txtTelefono.setText(null);
-        txtDomicilio.setText(null);
-        txtIva.setText(null);
-
-        clienteService.save(cliente);
-        dispose();
-        } else {
+        if (!clienteRepo.findByCuit(txtCuit.getText()).isPresent()) {
+            Cliente cliente = Cliente.builder()
+                    .apellido(txtApellido.getText())
+                    .nombre(txtNombre.getText())
+                    .cuit(txtCuit.getText())
+                    .telefono(Long.parseLong(txtTelefono.getText()))
+                    .direccion(txtDomicilio.getText())
+                    .email(txtEmail.getText())
+                    .condicionIva(txtIva.getText())
+                    .contacto(txtContacto.getText())
+                    .estado(true)
+                    .build();
             
+            txtApellido.setText(null);
+            txtNombre.setText(null);
+            txtCuit.setText(null);
+            txtTelefono.setText(null);
+            txtDomicilio.setText(null);
+            txtIva.setText(null);
+            
+            clienteService.save(cliente);
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "El cliente ya existe");
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -367,14 +370,14 @@ public class AltaClientes extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-
+        
         if (!txtApellido.getText().equals("")
                 && !txtNombre.getText().equals("")
                 && !txtCuit.getText().equals("")
                 && !txtTelefono.getText().equals("")) {
             
             aplicarCambios();
-
+            
         } else {
             
             JOptionPane.showMessageDialog(null, "Debe completar los campos obligatorios");
@@ -384,13 +387,13 @@ public class AltaClientes extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void rSButtonIconOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonIconOne1ActionPerformed
-
+        
         dispose();
 
     }//GEN-LAST:event_rSButtonIconOne1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-
+        
         dispose();
 
     }//GEN-LAST:event_btnCancelarActionPerformed
@@ -410,14 +413,14 @@ public class AltaClientes extends javax.swing.JDialog {
     }//GEN-LAST:event_txtTelefonoKeyTyped
 
     private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
-
+        
         x = evt.getX();
         y = evt.getY();
         
     }//GEN-LAST:event_jPanel2MousePressed
 
     private void jPanel2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseDragged
-
+        
         this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
         
     }//GEN-LAST:event_jPanel2MouseDragged
