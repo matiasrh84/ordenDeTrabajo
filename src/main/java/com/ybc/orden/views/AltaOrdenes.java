@@ -63,7 +63,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
         cboEquipo.removeAllItems();
         if(!lblCliente.getText().equals("")) {
         List<Equipo> datosEquipos = StreamSupport
-                .stream(equipoRepository.findByEstadoAndCliente(true, clienteServiceImpl.findById(MainFrame.idClientes).get()).spliterator(), false)
+                .stream(equipoRepository.findByEstadoAndCliente(true, clienteServiceImpl.findById(idCliente).get()).spliterator(), false)
                 .collect(Collectors.toList());
         cboEquipo.removeAllItems();
         for (Equipo equipo : datosEquipos) {
@@ -755,7 +755,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
 
         elegirCliente.setVisible(true);
-        lblCliente.setText(clienteServiceImpl.findById(MainFrame.idClientes).get().toString());
+        lblCliente.setText(clienteServiceImpl.findById(idCliente).get().toString());
         cargarEquipos();
 
     }//GEN-LAST:event_btnClienteActionPerformed
