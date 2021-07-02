@@ -37,9 +37,9 @@ public class Login extends javax.swing.JFrame {
     }
 
     public static void main(String... args) throws Exception {
-        context = new SpringApplicationBuilder(Login.class).headless(false).run(args);
-        //displayAllBeans();        
-        System.out.println("Sistema operativo:"+System.getProperty("os.name"));
+        try {
+            context = new SpringApplicationBuilder(Login.class).headless(false).run(args);
+            System.out.println("Sistema operativo:"+System.getProperty("os.name"));
         System.out.println("Separador:"+System.getProperty("file.separator"));
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -49,6 +49,10 @@ public class Login extends javax.swing.JFrame {
                 
             }
         });
+        } catch (Exception e) {
+            System.out.println("error tratando de conectarse");;
+        }         
+        
     }
 
     void aplicarCambios() {
@@ -59,7 +63,7 @@ public class Login extends javax.swing.JFrame {
             pass += password[i];
         }
         if (usuarioRepo.findByUsuario(txtUsuario.getText()).isPresent()) {
-            if (pass.equals(usuarioRepo.findByUsuario(txtUsuario.getText()).get().getClave())) {
+            if (pass.equals(usuarioRepo.findByUsuario(txtUsuario.getText()).get().getClave()) && usuarioRepo.findByUsuario(txtUsuario.getText()).get().getEstado().equals("Activo")) {
                 
                 nombreUsuario = usuarioRepo.findByUsuario(txtUsuario.getText()).get().getUsuario();                
                 Login login = context.getBean(Login.class);

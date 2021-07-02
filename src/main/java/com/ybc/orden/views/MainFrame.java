@@ -5,6 +5,7 @@ import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.entities.EstadoOrden;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.entities.Usuario;
+import com.ybc.orden.repositories.EstadoOrdenRepository;
 import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
 import com.ybc.orden.services.EstadoOrdenServiceImpl;
@@ -44,6 +45,7 @@ public class MainFrame extends javax.swing.JFrame {
     DefaultTableModel modelClientes;
     DefaultTableModel modelEquipos;
     DefaultTableModel modelUsuarios;
+    DefaultTableModel modelFiltrarOrdenes;
     SimpleDateFormat dateFormat;
 
     @Autowired
@@ -74,6 +76,8 @@ public class MainFrame extends javax.swing.JFrame {
     private Estado estado;
     @Autowired
     private EstadoOrdenServiceImpl estadoOrdenService;
+    @Autowired
+    private EstadoOrdenRepository estadoOrdenRepository;
     
 
     public MainFrame() {
@@ -189,7 +193,7 @@ public class MainFrame extends javax.swing.JFrame {
         modelUsuarios.setNumRows(0);
 
         for (Usuario datos : datosUsuarios) {
-            Object[] fila = {datos.getId(), datos.getApellido(), datos.getNombre(), datos.getDni(), datos.getUsuario()};
+            Object[] fila = {datos.getId(), datos.getApellido(), datos.getNombre(), datos.getDni(), datos.getUsuario(), datos.getEstado()};
             modelUsuarios.addRow(fila);
         }
 
@@ -234,6 +238,52 @@ public class MainFrame extends javax.swing.JFrame {
         equipo.setEstado(false);        
         equipoService.save(equipo);
     }
+    
+    void bajaUsuario (int id) {
+        Usuario oUsuario = usuarioService.findById(id).get();
+        oUsuario.setEstado(false);        
+        usuarioService.save(oUsuario);
+    }
+    
+    public void filtrarTablaOrdenes(String estado) {
+        modelFiltrarOrdenes = (DefaultTableModel) tablaOrdenes.getModel();
+        List<EstadoOrden> datosOrdenes = StreamSupport
+                .stream(estadoOrdenRepository.findByEstado(estado).spliterator(), false)
+                .collect(Collectors.toList());
+        modelFiltrarOrdenes.setNumRows(0);
+
+        for (EstadoOrden datos : datosOrdenes) {
+            Object[] fila = {datos.getOrden().getId(), dateFormat.format(datos.getFecha()), datos.getOrden().getEquipo(), datos.getOrden().getEquipo().getCliente().toString(), datos.getOrden().getUsuario().toString(), datos.getEstado(), datos.getId(), datos.getOrden().getUsuario().getId()};
+            modelFiltrarOrdenes.addRow(fila);
+        }
+
+        tablaOrdenes.getColumnModel().getColumn(0).setMaxWidth(70);
+        tablaOrdenes.getColumnModel().getColumn(0).setMinWidth(70);
+        tablaOrdenes.getColumnModel().getColumn(0).setPreferredWidth(70);
+
+        tablaOrdenes.getColumnModel().getColumn(1).setMaxWidth(90);
+        tablaOrdenes.getColumnModel().getColumn(1).setMinWidth(90);
+        tablaOrdenes.getColumnModel().getColumn(1).setPreferredWidth(90);
+
+        tablaOrdenes.getColumnModel().getColumn(3).setMaxWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(3).setMinWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(3).setPreferredWidth(140);
+
+        tablaOrdenes.getColumnModel().getColumn(4).setMaxWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(4).setMinWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(4).setPreferredWidth(140);
+
+        tablaOrdenes.getColumnModel().getColumn(5).setMaxWidth(80);
+        tablaOrdenes.getColumnModel().getColumn(5).setMinWidth(80);
+        tablaOrdenes.getColumnModel().getColumn(5).setPreferredWidth(80);
+
+        tablaOrdenes.getColumnModel().getColumn(6).setMaxWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(6).setMinWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(6).setPreferredWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(7).setMaxWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(7).setMinWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(7).setPreferredWidth(0);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -255,6 +305,8 @@ public class MainFrame extends javax.swing.JFrame {
         tablaOrdenes = new RSMaterialComponent.RSTableMetro();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterial();
         rSLabelIcon2 = new RSMaterialComponent.RSLabelIcon();
+        rSLabelIcon6 = new RSMaterialComponent.RSLabelIcon();
+        cboEstado = new RSMaterialComponent.RSComboBoxMaterial();
         btnModificarOrden = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnNuevaOrden = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnNuevaOrden1 = new RSMaterialComponent.RSButtonMaterialIconOne();
@@ -285,6 +337,7 @@ public class MainFrame extends javax.swing.JFrame {
         txtBuscarUsuario = new RSMaterialComponent.RSTextFieldMaterial();
         btnNuevoUsuario = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnModificarUsuario = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnBajaUsuario = new RSMaterialComponent.RSButtonMaterialIconOne();
         panelBotonCerrar = new javax.swing.JPanel();
         btnCerrar = new RSMaterialComponent.RSButtonIconOne();
         jLabel2 = new javax.swing.JLabel();
@@ -485,6 +538,17 @@ public class MainFrame extends javax.swing.JFrame {
         rSLabelIcon2.setForeground(new java.awt.Color(255, 255, 255));
         rSLabelIcon2.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
 
+        rSLabelIcon6.setForeground(new java.awt.Color(255, 255, 255));
+        rSLabelIcon6.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.FLIP);
+
+        cboEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Filtrar por...", "Asignada", "Terminada", "Entregada", "Anulada" }));
+        cboEstado.setColorMaterial(new java.awt.Color(0, 153, 255));
+        cboEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboEstadoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelTablaOrdenesLayout = new javax.swing.GroupLayout(panelTablaOrdenes);
         panelTablaOrdenes.setLayout(panelTablaOrdenesLayout);
         panelTablaOrdenesLayout.setHorizontalGroup(
@@ -497,16 +561,22 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(rSLabelIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rSLabelIcon6, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelTablaOrdenesLayout.setVerticalGroup(
             panelTablaOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTablaOrdenesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelTablaOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rSLabelIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelTablaOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelTablaOrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(rSLabelIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rSLabelIcon6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                 .addContainerGap())
@@ -895,14 +965,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Apellido", "Nombre", "DNI", "Usuario"
+                "Id", "Apellido", "Nombre", "DNI", "Usuario", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -996,6 +1066,18 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnBajaUsuario.setBackground(new java.awt.Color(255, 51, 51));
+        btnBajaUsuario.setText("Baja usuario");
+        btnBajaUsuario.setBackgroundHover(new java.awt.Color(153, 0, 0));
+        btnBajaUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnBajaUsuario.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.REMOVE);
+        btnBajaUsuario.setRound(20);
+        btnBajaUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBajaUsuarioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelUsuariosLayout = new javax.swing.GroupLayout(panelUsuarios);
         panelUsuarios.setLayout(panelUsuariosLayout);
         panelUsuariosLayout.setHorizontalGroup(
@@ -1003,7 +1085,9 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panelUsuariosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNuevoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btnBajaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addComponent(btnModificarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(panelTablaUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1015,7 +1099,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNuevoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModificarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnModificarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBajaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1264,9 +1349,13 @@ public class MainFrame extends javax.swing.JFrame {
         if (tablaClientes.getSelectedRow() < 0) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente");
         } else {
+            if(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 4).toString().equals("Activo")) {
             Optional<Cliente> cliente = clienteService.findById(Integer.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString()));
             idClientes = cliente.get().getId();
             modificarCliente();
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente activo");
+            }
         }
         
     }//GEN-LAST:event_btnModificarClienteActionPerformed
@@ -1280,9 +1369,18 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnModificarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarEquipoActionPerformed
 
-        altaEquipos.setVisible(true);
-        cargarTablaEquipos();
-
+        if (tablaEquipos.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un equipo");
+        } else {
+            if(tablaEquipos.getValueAt(tablaEquipos.getSelectedRow(), 4).toString().equals("Activo")) {
+            Optional<Equipo> equipoObject = equipoService.findById(Integer.valueOf(tablaEquipos.getValueAt(tablaEquipos.getSelectedRow(), 0).toString()));
+            idEquipos = equipoObject.get().getId();
+            modificarEquipo();
+            cargarTablaEquipos();
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un equipo activo");
+            }
+        }
     }//GEN-LAST:event_btnModificarEquipoActionPerformed
 
     private void btnNuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoUsuarioActionPerformed
@@ -1297,10 +1395,14 @@ public class MainFrame extends javax.swing.JFrame {
         if (tablaUsuarios.getSelectedRow() < 0) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un usuario");
         } else {
+            if(tablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 5).toString().equals("Activo")) {
             Optional<Usuario> usuarioObject = usuarioService.findById(Integer.valueOf(tablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 0).toString()));
             idUsuarios = usuarioObject.get().getId();
             modificarUsuario();
             cargarTablaUsuarios();
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un usuario activo");
+            }
         }
 
     }//GEN-LAST:event_btnModificarUsuarioActionPerformed
@@ -1469,9 +1571,40 @@ public class MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnBajaEquipoActionPerformed
 
+    private void cboEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboEstadoActionPerformed
+
+        if(!cboEstado.getSelectedItem().toString().equals("Filtrar por...")) {
+            filtrarTablaOrdenes(cboEstado.getSelectedItem().toString());
+        } else{
+            cargarTablaOrdenes();
+            System.out.println("entra");
+        }
+            
+        
+    }//GEN-LAST:event_cboEstadoActionPerformed
+
+    private void btnBajaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaUsuarioActionPerformed
+
+        if (tablaUsuarios.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un usuario");
+        } else {
+            Optional<Usuario> oUsuario = this.usuarioService.findById(Integer.valueOf(tablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 0).toString()));
+            idUsuarios = oUsuario.get().getId();
+            bajaUsuario(idUsuarios);
+            if(idUsuario!=idUsuarios) {
+            cargarTablaUsuarios();
+            } else{
+                JOptionPane.showMessageDialog(null, "Se dió de baja el usuario actual");
+                System.exit(0);
+            }
+        }
+        
+    }//GEN-LAST:event_btnBajaUsuarioActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnBajaEquipo;
+    public static RSMaterialComponent.RSButtonMaterialIconOne btnBajaUsuario;
     private RSMaterialComponent.RSButtonIconOne btnCerrar;
     private RSMaterialComponent.RSButtonIconOne btnCerrar1;
     private RSMaterialComponent.RSButtonMaterialIconOne btnClientes;
@@ -1490,6 +1623,7 @@ public class MainFrame extends javax.swing.JFrame {
     private RSMaterialComponent.RSButtonMaterialIconOne btnOrdenes;
     private RSMaterialComponent.RSButtonMaterialIconOne btnSalir;
     private RSMaterialComponent.RSButtonMaterialIconOne btnUsuarios;
+    private RSMaterialComponent.RSComboBoxMaterial cboEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1516,6 +1650,7 @@ public class MainFrame extends javax.swing.JFrame {
     private RSMaterialComponent.RSLabelIcon rSLabelIcon3;
     private RSMaterialComponent.RSLabelIcon rSLabelIcon4;
     private RSMaterialComponent.RSLabelIcon rSLabelIcon5;
+    private RSMaterialComponent.RSLabelIcon rSLabelIcon6;
     private RSMaterialComponent.RSTableMetro tablaClientes;
     private RSMaterialComponent.RSTableMetro tablaEquipos;
     public static RSMaterialComponent.RSTableMetro tablaOrdenes;

@@ -26,6 +26,8 @@ public class ElegirCliente extends javax.swing.JDialog {
     private ClienteRepository clienteRepository;
     @Autowired
     private ClienteServiceImpl clienteService;
+    @Autowired
+    private AltaClientes abmClientes;
 
     public ElegirCliente() {
         initComponents();
@@ -69,6 +71,7 @@ public class ElegirCliente extends javax.swing.JDialog {
         tablaClientes = new RSMaterialComponent.RSTableMetro();
         rSLabelIcon2 = new RSMaterialComponent.RSLabelIcon();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterial();
+        btnAltaCliente = new RSMaterialComponent.RSButtonMaterialIconTwo();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -236,6 +239,19 @@ public class ElegirCliente extends javax.swing.JDialog {
             }
         });
 
+        btnAltaCliente.setBackground(new java.awt.Color(0, 153, 51));
+        btnAltaCliente.setText("Alta cliente");
+        btnAltaCliente.setBackgroundHover(new java.awt.Color(0, 102, 0));
+        btnAltaCliente.setFont(new java.awt.Font("Roboto Bold", 1, 12)); // NOI18N
+        btnAltaCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnAltaCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
+        btnAltaCliente.setRound(10);
+        btnAltaCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAltaClienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -247,18 +263,21 @@ public class ElegirCliente extends javax.swing.JDialog {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(rSLabelIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAltaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAltaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(rSLabelIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -357,9 +376,21 @@ public class ElegirCliente extends javax.swing.JDialog {
         tablaClientes.setRowSorter(sorter);
     }//GEN-LAST:event_txtBuscarKeyReleased
 
+    private void btnAltaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaClienteActionPerformed
+
+        abmClientes.setVisible(true);
+        cargarTablaClientes();
+        Optional<Cliente> cliente = clienteService.findById(Integer.valueOf(tablaClientes.getValueAt(tablaClientes.getRowCount()-1, 0).toString()));
+            AltaOrdenes.idCliente = cliente.get().getId();
+            ModificaOrdenes.idCliente = cliente.get().getId();
+            dispose();
+
+    }//GEN-LAST:event_btnAltaClienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAceptar;
+    private RSMaterialComponent.RSButtonMaterialIconTwo btnAltaCliente;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnCancelar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

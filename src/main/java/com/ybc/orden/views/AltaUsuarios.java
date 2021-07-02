@@ -65,6 +65,7 @@ public class AltaUsuarios extends javax.swing.JDialog {
                         .clave(pass)
                         .tecnico(tecnico)
                         .permisos(permisos)
+                        .estado(true)
                         .build();
 
                 txtApellido.setText(null);

@@ -37,6 +37,13 @@ public class Usuario implements Serializable {
     @Override public String toString() {
      
         return apellido+", "+nombre;
-    } 
+    }
+    public String getEstado() {
+        String sEstado ="Inactivo";
+        if(estado) {
+            sEstado="Activo";
+        }
+        return sEstado;
+    }
     
 }

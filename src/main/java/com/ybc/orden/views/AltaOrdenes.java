@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
     int x;
     int y;
     public static int idCliente;
+    public static boolean banderaAltaEquipos= false;
 
     @Autowired
     private OrdenServiceImpl ordenService;
@@ -129,6 +131,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
                 .orden(orden)
                 .build();
 
+        lblCliente.setText("");
         cboEquipo.setSelectedIndex(0);
         cboUsuario.setSelectedIndex(0);
         radioTaller.setSelected(true);
@@ -155,7 +158,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
         grupoCondicion = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        rSButtonIconOne1 = new RSMaterialComponent.RSButtonIconOne();
+        btnCerrar = new RSMaterialComponent.RSButtonIconOne();
         rSLabelTextIcon1 = new RSMaterialComponent.RSLabelTextIcon();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -213,15 +216,15 @@ public class AltaOrdenes extends javax.swing.JDialog {
             }
         });
 
-        rSButtonIconOne1.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonIconOne1.setForeground(new java.awt.Color(255, 51, 51));
-        rSButtonIconOne1.setBackgroundHover(new java.awt.Color(153, 0, 0));
-        rSButtonIconOne1.setForegroundText(new java.awt.Color(255, 51, 51));
-        rSButtonIconOne1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CLOSE);
-        rSButtonIconOne1.setSizeIcon(20.0F);
-        rSButtonIconOne1.addActionListener(new java.awt.event.ActionListener() {
+        btnCerrar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCerrar.setForeground(new java.awt.Color(255, 51, 51));
+        btnCerrar.setBackgroundHover(new java.awt.Color(153, 0, 0));
+        btnCerrar.setForegroundText(new java.awt.Color(255, 51, 51));
+        btnCerrar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CLOSE);
+        btnCerrar.setSizeIcon(20.0F);
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonIconOne1ActionPerformed(evt);
+                btnCerrarActionPerformed(evt);
             }
         });
 
@@ -239,7 +242,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(rSLabelTextIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rSButtonIconOne1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -247,7 +250,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rSButtonIconOne1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rSLabelTextIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -469,6 +472,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
         btnAltaEquipo.setText("Alta equipo");
         btnAltaEquipo.setBackgroundHover(new java.awt.Color(0, 102, 0));
         btnAltaEquipo.setFont(new java.awt.Font("Roboto Bold", 1, 12)); // NOI18N
+        btnAltaEquipo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnAltaEquipo.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
         btnAltaEquipo.setMaximumSize(new java.awt.Dimension(75, 15));
         btnAltaEquipo.setMinimumSize(new java.awt.Dimension(75, 15));
@@ -537,6 +541,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
         btnCliente.setText("Cliente");
         btnCliente.setBackgroundHover(new java.awt.Color(204, 102, 0));
         btnCliente.setFont(new java.awt.Font("Roboto Bold", 1, 12)); // NOI18N
+        btnCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
         btnCliente.setMaximumSize(new java.awt.Dimension(75, 15));
         btnCliente.setMinimumSize(new java.awt.Dimension(75, 15));
@@ -604,17 +609,11 @@ public class AltaOrdenes extends javax.swing.JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(radioFacturar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(lblCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGap(27, 27, 27)
-                                            .addComponent(radioGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGap(18, 18, 18)
-                                            .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnAltaEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                    .addComponent(radioGarantia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnAltaEquipo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -682,26 +681,56 @@ public class AltaOrdenes extends javax.swing.JDialog {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
 
         aplicarCambios();
+        
 
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    private void rSButtonIconOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonIconOne1ActionPerformed
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
 
+        lblCliente.setText("");        
+        cboUsuario.setSelectedIndex(0);
+        radioTaller.setSelected(true);
+        radioFacturar.setSelected(true);
+        txtAccesorios.setText(null);
+        txtDetalle.setText(null);
+        txtDefectos.setText(null);
+        txaConfiguracion.setText(null);
+        txaDiagnostico.setText(null);
+        txaSolucion.setText(null);
         dispose();
 
-    }//GEN-LAST:event_rSButtonIconOne1ActionPerformed
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
 
+        lblCliente.setText("");        
+        cboUsuario.setSelectedIndex(0);
+        radioTaller.setSelected(true);
+        radioFacturar.setSelected(true);
+        txtAccesorios.setText(null);
+        txtDetalle.setText(null);
+        txtDefectos.setText(null);
+        txaConfiguracion.setText(null);
+        txaDiagnostico.setText(null);
+        txaSolucion.setText(null);
         dispose();
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAltaEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaEquipoActionPerformed
 
+        if(!lblCliente.getText().equals("")) {
+            banderaAltaEquipos=true;
+        System.out.println("bandera equipos: "+banderaAltaEquipos);
+        abmEquipos.cargarClientes();
         abmEquipos.setVisible(true);
         cargarEquipos();
         cboEquipo.setSelectedIndex(cboEquipo.getItemCount() - 1);
+        banderaAltaEquipos= false;
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente");
+        }
 
     }//GEN-LAST:event_btnAltaEquipoActionPerformed
 
@@ -755,8 +784,10 @@ public class AltaOrdenes extends javax.swing.JDialog {
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
 
         elegirCliente.setVisible(true);
-        lblCliente.setText(clienteServiceImpl.findById(idCliente).get().toString());
+        if(idCliente!=0) {
+        lblCliente.setText(clienteServiceImpl.findById(idCliente).get().toString());        
         cargarEquipos();
+        }
 
     }//GEN-LAST:event_btnClienteActionPerformed
 
@@ -766,6 +797,7 @@ public class AltaOrdenes extends javax.swing.JDialog {
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAltaEquipo;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAltaUsuario;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnCancelar;
+    private RSMaterialComponent.RSButtonIconOne btnCerrar;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnCliente;
     private RSMaterialComponent.RSComboBoxMaterial cboEquipo;
     private RSMaterialComponent.RSComboBoxMaterial cboUsuario;
@@ -791,7 +823,6 @@ public class AltaOrdenes extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblCliente;
-    private RSMaterialComponent.RSButtonIconOne rSButtonIconOne1;
     private RSMaterialComponent.RSLabelTextIcon rSLabelTextIcon1;
     private RSMaterialComponent.RSRadioButtonMaterial radioDomicilio;
     private RSMaterialComponent.RSRadioButtonMaterial radioFacturar;
