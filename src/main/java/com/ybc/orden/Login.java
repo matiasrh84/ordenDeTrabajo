@@ -13,82 +13,79 @@ import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 public class Login extends javax.swing.JFrame {
-    
-    int x,y;
+
+    int x, y;
 
     @Autowired
     private UsuarioRepository usuarioRepo;
     public static ApplicationContext context;
     public static String nombreUsuario;
-    
+
     public Login() {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
-        
-    }
-      
-    public static void displayAllBeans() {
-        String[] allBeanNames = context.getBeanDefinitionNames();
-        for (String beanName : allBeanNames) {
-            System.out.println(beanName);
-            
-        }
+
     }
 
-    public static void main(String... args) throws Exception {
-        try {
-            context = new SpringApplicationBuilder(Login.class).headless(false).run(args);
-            System.out.println("Sistema operativo:"+System.getProperty("os.name"));
-        System.out.println("Separador:"+System.getProperty("file.separator"));
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Login login = context.getBean(Login.class);
-                login.setIconImage(new ImageIcon(getClass().getResource("/imagenes/icono.png")).getImage());
-                login.setVisible(true);
-                
-            }
-        });
-        } catch (Exception e) {
-            System.out.println("error tratando de conectarse");;
-        }         
+//    public static void displayAllBeans() {
+//        String[] allBeanNames = context.getBeanDefinitionNames();
+//        for (String beanName : allBeanNames) {
+//            System.out.println(beanName);
+//            
+//        }
+//    }
+    public static void main(String... args) {
         
+            context = new SpringApplicationBuilder(Login.class).headless(false).run(args);
+
+            //displayAllBeans();        
+            System.out.println("Sistema operativo:" + System.getProperty("os.name"));
+            System.out.println("Separador:" + System.getProperty("file.separator"));
+
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {                  
+                    Login login = context.getBean(Login.class);
+                    login.setIconImage(new ImageIcon(getClass().getResource("/imagenes/icono.png")).getImage());
+                    login.setVisible(true);                    
+                }
+            });        
     }
 
     void aplicarCambios() {
-        String pass = "";
         
+        String pass = "";
         char[] password = txtClave.getPassword();
+        
         for (int i = 0; i < password.length; i++) {
             pass += password[i];
         }
+        
         if (usuarioRepo.findByUsuario(txtUsuario.getText()).isPresent()) {
             if (pass.equals(usuarioRepo.findByUsuario(txtUsuario.getText()).get().getClave()) && usuarioRepo.findByUsuario(txtUsuario.getText()).get().getEstado().equals("Activo")) {
                 
-                nombreUsuario = usuarioRepo.findByUsuario(txtUsuario.getText()).get().getUsuario();                
+                nombreUsuario = usuarioRepo.findByUsuario(txtUsuario.getText()).get().getUsuario();
                 Login login = context.getBean(Login.class);
-                login.setVisible(false);                
+                login.setVisible(false);
                 MainFrame mainFrame = context.getBean(MainFrame.class);
                 mainFrame.lblUsuario.setText(nombreUsuario);
                 idUsuario = usuarioRepo.findByUsuario(txtUsuario.getText()).get().getId();
                 mainFrame.setIconImage(new ImageIcon(getClass().getResource("/imagenes/icono.png")).getImage());
                 mainFrame.setVisible(true);
-                if(usuarioRepo.findById(idUsuario).get().getPermisos()==0) {
+                if (usuarioRepo.findById(idUsuario).get().getPermisos() == 0) {
                     MainFrame.btnNuevoUsuario.setEnabled(true);
                     MainFrame.btnModificarUsuario.setEnabled(true);
-                }
-                else {
+                } else {
                     MainFrame.btnNuevoUsuario.setEnabled(false);
                     MainFrame.btnModificarUsuario.setEnabled(false);
                 }
-
             } else {
                 JOptionPane.showMessageDialog(null, "Usuario no registrado o contraseña incorrecta");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Usuario no registrado o contraseña incorrecta");
         }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -282,13 +279,13 @@ public class Login extends javax.swing.JFrame {
 
         x = evt.getX();
         y = evt.getY();
-        
+
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
 
         this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
-        
+
     }//GEN-LAST:event_jPanel1MouseDragged
 
 

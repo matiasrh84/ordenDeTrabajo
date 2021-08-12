@@ -93,7 +93,9 @@ public class AltaOrdenes extends javax.swing.JDialog {
     }
 
     void aplicarCambios() {
-
+        if(!lblCliente.getText().equals("") && 
+                !cboEquipo.getSelectedItem().toString().equals("") && 
+                !cboUsuario.getSelectedItem().toString().equals("")) {
         String lugar;
         String condicion;
         Calendar fecha = Calendar.getInstance();
@@ -148,6 +150,9 @@ public class AltaOrdenes extends javax.swing.JDialog {
         Report report = new Report();
         report.imprimirReportes(report.OrdenDeTrabajo(orden), report.OrdenDeTrabajoDuplicado(orden), orden);
         dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe completar los campos obligatorios");
+        }
     }
 
     @SuppressWarnings("unchecked")

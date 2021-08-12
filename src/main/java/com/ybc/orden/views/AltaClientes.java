@@ -25,7 +25,7 @@ public class AltaClientes extends javax.swing.JDialog {
     }
     
     void aplicarCambios() {
-        if (!clienteRepo.findByCuit(txtCuit.getText()).isPresent()) {
+        if (!clienteRepo.findByCuitAndApellido(txtCuit.getText(), txtApellido.getText()).isPresent()) {
             Cliente cliente = Cliente.builder()
                     .apellido(txtApellido.getText())
                     .nombre(txtNombre.getText())
@@ -44,6 +44,8 @@ public class AltaClientes extends javax.swing.JDialog {
             txtTelefono.setText(null);
             txtDomicilio.setText(null);
             txtIva.setText(null);
+            txtEmail.setText(null);
+            txtContacto.setText(null);
             
             clienteService.save(cliente);
             dispose();
