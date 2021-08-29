@@ -73,7 +73,7 @@ public class MainFrame extends javax.swing.JFrame {
     @Autowired
     private ModificaOrdenes modificaOrdenes;
     @Autowired
-    private Estado estado;    
+    private Estado estado;
     @Autowired
     private EstadoOrdenRepository estadoOrdenRepository;
     @Autowired
@@ -107,9 +107,6 @@ public class MainFrame extends javax.swing.JFrame {
     @PostConstruct
     public void cargarTablaOrdenes() {
         modelOrdenes = (DefaultTableModel) tablaOrdenes.getModel();
-        /*List<EstadoOrden> datosOrdenes = StreamSupport
-                .stream(estadoOrdenService.findAll().spliterator(), false)
-                .collect(Collectors.toList());*/
         List<EstadoOrden> datosOrdenes = StreamSupport
                 .stream(estadoOrdenRepository.findByEstadoActual(true).spliterator(), false)
                 .collect(Collectors.toList());
@@ -119,7 +116,6 @@ public class MainFrame extends javax.swing.JFrame {
             Object[] fila = {datos.getOrden().getId(), dateFormat.format(datos.getFecha()), datos.getOrden().getEquipo(), datos.getOrden().getEquipo().getCliente().toString(), datos.getOrden().getUsuario().toString(), datos.getEstado(), datos.getId(), datos.getOrden().getUsuario().getId()};
             modelOrdenes.addRow(fila);
         }
-
         tablaOrdenes.getColumnModel().getColumn(0).setMaxWidth(70);
         tablaOrdenes.getColumnModel().getColumn(0).setMinWidth(70);
         tablaOrdenes.getColumnModel().getColumn(0).setPreferredWidth(70);
@@ -128,17 +124,17 @@ public class MainFrame extends javax.swing.JFrame {
         tablaOrdenes.getColumnModel().getColumn(1).setMinWidth(90);
         tablaOrdenes.getColumnModel().getColumn(1).setPreferredWidth(90);
 
-        tablaOrdenes.getColumnModel().getColumn(3).setMaxWidth(140);
-        tablaOrdenes.getColumnModel().getColumn(3).setMinWidth(140);
-        tablaOrdenes.getColumnModel().getColumn(3).setPreferredWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(3).setMaxWidth(180);
+        tablaOrdenes.getColumnModel().getColumn(3).setMinWidth(180);
+        tablaOrdenes.getColumnModel().getColumn(3).setPreferredWidth(180);
 
-        tablaOrdenes.getColumnModel().getColumn(4).setMaxWidth(140);
-        tablaOrdenes.getColumnModel().getColumn(4).setMinWidth(140);
-        tablaOrdenes.getColumnModel().getColumn(4).setPreferredWidth(140);
+        tablaOrdenes.getColumnModel().getColumn(4).setMaxWidth(150);
+        tablaOrdenes.getColumnModel().getColumn(4).setMinWidth(150);
+        tablaOrdenes.getColumnModel().getColumn(4).setPreferredWidth(150);
 
-        tablaOrdenes.getColumnModel().getColumn(5).setMaxWidth(80);
-        tablaOrdenes.getColumnModel().getColumn(5).setMinWidth(80);
-        tablaOrdenes.getColumnModel().getColumn(5).setPreferredWidth(80);
+        tablaOrdenes.getColumnModel().getColumn(5).setMaxWidth(100);
+        tablaOrdenes.getColumnModel().getColumn(5).setMinWidth(100);
+        tablaOrdenes.getColumnModel().getColumn(5).setPreferredWidth(100);
 
         tablaOrdenes.getColumnModel().getColumn(6).setMaxWidth(0);
         tablaOrdenes.getColumnModel().getColumn(6).setMinWidth(0);
@@ -164,7 +160,6 @@ public class MainFrame extends javax.swing.JFrame {
         tablaClientes.getColumnModel().getColumn(0).setMaxWidth(0);
         tablaClientes.getColumnModel().getColumn(0).setMinWidth(0);
         tablaClientes.getColumnModel().getColumn(0).setPreferredWidth(0);
-
     }
 
     public void cargarTablaEquipos() {
@@ -179,11 +174,9 @@ public class MainFrame extends javax.swing.JFrame {
             Object[] fila = {datos.getId(), datos.getMarca(), datos.getModelo(), datos.getCliente().getApellido() + ", " + datos.getCliente().getNombre(), datos.getEstado()};
             modelEquipos.addRow(fila);
         }
-
         tablaEquipos.getColumnModel().getColumn(0).setMaxWidth(0);
         tablaEquipos.getColumnModel().getColumn(0).setMinWidth(0);
         tablaEquipos.getColumnModel().getColumn(0).setPreferredWidth(0);
-
     }
 
     public void cargarTablaUsuarios() {
@@ -202,7 +195,6 @@ public class MainFrame extends javax.swing.JFrame {
         tablaUsuarios.getColumnModel().getColumn(0).setMaxWidth(0);
         tablaUsuarios.getColumnModel().getColumn(0).setMinWidth(0);
         tablaUsuarios.getColumnModel().getColumn(0).setPreferredWidth(0);
-
     }
 
     void modificarCliente() {
@@ -246,10 +238,10 @@ public class MainFrame extends javax.swing.JFrame {
         oUsuario.setEstado(false);
         usuarioService.save(oUsuario);
     }
-    
+
     void trazabilidad() {
         trazabilidad.cargarTablaEstadoOrdenes();
-        trazabilidad.setVisible(true);        
+        trazabilidad.setVisible(true);
     }
 
     public void filtrarTablaOrdenes(String estado) {
@@ -671,17 +663,17 @@ public class MainFrame extends javax.swing.JFrame {
             .addComponent(panelTablaOrdenes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOrdenesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnNuevaOrden1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnNuevaOrden3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnNuevaOrden2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnNuevaOrden4, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnModificarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNuevaOrden, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btnNuevaOrden1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnNuevaOrden3, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnNuevaOrden2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnNuevaOrden4, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnModificarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelOrdenesLayout.setVerticalGroup(
@@ -766,7 +758,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panelTablaClientesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTablaClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 969, Short.MAX_VALUE)
                     .addGroup(panelTablaClientesLayout.createSequentialGroup()
                         .addComponent(rSLabelIcon3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -909,7 +901,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panelTablaEquiposLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTablaEquiposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 969, Short.MAX_VALUE)
                     .addGroup(panelTablaEquiposLayout.createSequentialGroup()
                         .addComponent(rSLabelIcon4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1126,7 +1118,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(btnNuevoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnBajaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, Short.MAX_VALUE)
                 .addComponent(btnModificarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(panelTablaUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1291,7 +1283,6 @@ public class MainFrame extends javax.swing.JFrame {
         panelEquipos.setVisible(false);
         panelUsuarios.setVisible(false);
         cargarTablaOrdenes();
-
     }//GEN-LAST:event_btnOrdenesActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -1365,16 +1356,16 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Debe seleccionar una orden");
         } else {
             if ((idUsuario == Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 7).toString())) || (usuarioService.findById(idUsuario).get().getPermisos() == 0)) {
-            if (!tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 5).equals("Anulada")) {
-                Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
-                idOrdenes = orden.get().getId();
-                Optional<Cliente> cliente = clienteService.findById(orden.get().getEquipo().getCliente().getId());
-                idClientes = cliente.get().getId();
-                modificarOrden();
+                if (!tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 5).equals("Anulada")) {
+                    Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
+                    idOrdenes = orden.get().getId();
+                    Optional<Cliente> cliente = clienteService.findById(orden.get().getEquipo().getCliente().getId());
+                    idClientes = cliente.get().getId();
+                    modificarOrden();
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se puede modificar una orden anulada");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "No se puede modificar una orden anulada");
-            }
-        } else {
                 JOptionPane.showMessageDialog(null, "Esta orden no puede ser modificada por este usuario");
             }
         }
@@ -1387,7 +1378,6 @@ public class MainFrame extends javax.swing.JFrame {
         altaOrdenes.cargarEquipos();
         altaOrdenes.setVisible(true);
         cargarTablaOrdenes();
-
 
     }//GEN-LAST:event_btnNuevaOrdenActionPerformed
 
@@ -1404,7 +1394,6 @@ public class MainFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente activo");
             }
         }
-
     }//GEN-LAST:event_btnModificarClienteActionPerformed
 
     private void btnNuevoEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEquipoActionPerformed
@@ -1451,7 +1440,6 @@ public class MainFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Debe seleccionar un usuario activo");
             }
         }
-
     }//GEN-LAST:event_btnModificarUsuarioActionPerformed
 
     private void panelBotonCerrarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelBotonCerrarMousePressed
@@ -1487,7 +1475,6 @@ public class MainFrame extends javax.swing.JFrame {
             idClientes = cliente.get().getId();
             modificarCliente();
         }
-
     }//GEN-LAST:event_tablaClientesMouseClicked
 
     private void tablaEquiposMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEquiposMouseClicked
@@ -1496,9 +1483,7 @@ public class MainFrame extends javax.swing.JFrame {
             Optional<Equipo> equipo = equipoService.findById(Integer.valueOf(tablaEquipos.getValueAt(tablaEquipos.getSelectedRow(), 0).toString()));
             idEquipos = equipo.get().getId();
             modificarEquipo();
-
         }
-
     }//GEN-LAST:event_tablaEquiposMouseClicked
 
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
@@ -1510,7 +1495,6 @@ public class MainFrame extends javax.swing.JFrame {
                 modificarUsuario();
             }
         }
-
     }//GEN-LAST:event_tablaUsuariosMouseClicked
 
     private void tablaOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaOrdenesMouseClicked
@@ -1519,9 +1503,7 @@ public class MainFrame extends javax.swing.JFrame {
             Optional<Orden> orden = ordenService.findById(Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString()));
             idOrdenes = orden.get().getId();
             modificarOrden();
-
         }
-
     }//GEN-LAST:event_tablaOrdenesMouseClicked
 
     private void btnNuevaOrden1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaOrden1ActionPerformed
@@ -1534,15 +1516,14 @@ public class MainFrame extends javax.swing.JFrame {
                     idEstado = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 6).toString());
                     idOrdenes = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString());
                     estado.setVisible(true);
-                    cargarTablaOrdenes();                
-            } else {
-                JOptionPane.showMessageDialog(null, "Esta orden no puede ser modificada por este usuario");
-            }
+                    cargarTablaOrdenes();
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se puede modificar una orden anulada");
+                    JOptionPane.showMessageDialog(null, "Esta orden no puede ser modificada por este usuario");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "No se puede modificar una orden anulada");
+            }
         }
-
     }//GEN-LAST:event_btnNuevaOrden1ActionPerformed
 
     private void btnNuevaOrden2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaOrden2ActionPerformed
@@ -1554,8 +1535,6 @@ public class MainFrame extends javax.swing.JFrame {
             Report report = new Report();
             report.imprimirReportes(report.OrdenDeTrabajo(orden.get()), report.OrdenDeTrabajoDuplicado(orden.get()), orden.get());
         }
-
-
     }//GEN-LAST:event_btnNuevaOrden2ActionPerformed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
@@ -1606,7 +1585,6 @@ public class MainFrame extends javax.swing.JFrame {
             bajaCliente(idClientes);
             cargarTablaClientes();
         }
-
     }//GEN-LAST:event_btnNuevoCliente1ActionPerformed
 
     private void btnBajaEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaEquipoActionPerformed
@@ -1619,7 +1597,6 @@ public class MainFrame extends javax.swing.JFrame {
             bajaEquipo(idEquipos);
             cargarTablaEquipos();
         }
-
     }//GEN-LAST:event_btnBajaEquipoActionPerformed
 
     private void cboEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboEstadoActionPerformed
@@ -1630,8 +1607,6 @@ public class MainFrame extends javax.swing.JFrame {
             cargarTablaOrdenes();
             System.out.println("entra");
         }
-
-
     }//GEN-LAST:event_cboEstadoActionPerformed
 
     private void btnBajaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaUsuarioActionPerformed
@@ -1649,7 +1624,6 @@ public class MainFrame extends javax.swing.JFrame {
                 System.exit(0);
             }
         }
-
     }//GEN-LAST:event_btnBajaUsuarioActionPerformed
 
     private void btnNuevaOrden3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaOrden3ActionPerformed
@@ -1659,17 +1633,14 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             idOrdenes = Integer.valueOf(tablaOrdenes.getValueAt(tablaOrdenes.getSelectedRow(), 0).toString());
             trazabilidad();
-            
         }
-        
     }//GEN-LAST:event_btnNuevaOrden3ActionPerformed
 
     private void btnNuevaOrden4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaOrden4ActionPerformed
 
-        if(Excel.exportarTablaExcel(tablaOrdenes)) {
+        if (Excel.exportarTablaExcel(tablaOrdenes)) {
             JOptionPane.showMessageDialog(null, "Exportado exitosamente");
         }
-        
     }//GEN-LAST:event_btnNuevaOrden4ActionPerformed
 
 
