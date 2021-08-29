@@ -28,7 +28,8 @@ public class ModificaOrdenes extends javax.swing.JDialog {
     @Autowired
     private UsuarioServiceImpl usuarioService;
     @Autowired
-    private AltaUsuarios abmUsuarios;    
+    private AltaUsuarios abmUsuarios;  
+    
     
     
     public ModificaOrdenes() {

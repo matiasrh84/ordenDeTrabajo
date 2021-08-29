@@ -23,7 +23,6 @@ public class AltaUsuarios extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
-        radioSi.setSelected(true);
     }
 
     void aplicarCambios() {
@@ -38,22 +37,22 @@ public class AltaUsuarios extends javax.swing.JDialog {
                 pass += password[i];
             }
             if (!pass.equals("")) {
-                if (radioSi.isSelected()) {
+                if (cboRoles.getSelectedItem().toString().equals("Técnico")) {
                     tecnico = true;
                 }
-                switch (cboPermisos.getSelectedItem().toString()) {
+                switch (cboRoles.getSelectedItem().toString()) {
 
                     case "Administrador":
                         permisos = 0;
                         break;
-                    case "Rol":
+                    case "Técnico":
                         permisos = 1;
                         break;
-                    case "Solo lectura":
+                    case "Cajero":
                         permisos = 2;
                         break;
                     default:
-                        permisos = 2;
+                        permisos = 3;
                         break;
                 }
 
@@ -92,7 +91,6 @@ public class AltaUsuarios extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        grupoTecnico = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         txtApellido = new RSMaterialComponent.RSTextFieldMaterial();
         jPanel2 = new javax.swing.JPanel();
@@ -112,11 +110,8 @@ public class AltaUsuarios extends javax.swing.JDialog {
         btnCancelar = new RSMaterialComponent.RSButtonMaterialIconTwo();
         txtContraseña = new RSMaterialComponent.RSPasswordMaterial();
         txtRepiteContraseña = new RSMaterialComponent.RSPasswordMaterial();
-        jLabel8 = new javax.swing.JLabel();
-        radioSi = new RSMaterialComponent.RSRadioButtonMaterial();
-        radioNo = new RSMaterialComponent.RSRadioButtonMaterial();
         jLabel9 = new javax.swing.JLabel();
-        cboPermisos = new RSMaterialComponent.RSComboBoxMaterial();
+        cboRoles = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -289,26 +284,11 @@ public class AltaUsuarios extends javax.swing.JDialog {
         txtRepiteContraseña.setPlaceholder("Repita contraseña");
         txtRepiteContraseña.setSelectionColor(new java.awt.Color(51, 153, 255));
 
-        jLabel8.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
-        jLabel8.setText("Técnico:");
-
-        grupoTecnico.add(radioSi);
-        radioSi.setForeground(new java.awt.Color(51, 153, 255));
-        radioSi.setText("Si");
-        radioSi.setColorCheck(new java.awt.Color(51, 153, 255));
-        radioSi.setColorUnCheck(new java.awt.Color(51, 153, 255));
-
-        grupoTecnico.add(radioNo);
-        radioNo.setForeground(new java.awt.Color(51, 153, 255));
-        radioNo.setText("No");
-        radioNo.setColorCheck(new java.awt.Color(51, 153, 255));
-        radioNo.setColorUnCheck(new java.awt.Color(51, 153, 255));
-
         jLabel9.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
-        jLabel9.setText("Permisos:");
+        jLabel9.setText("Roles:");
 
-        cboPermisos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Solo lectura", "Rol", "Administrador" }));
-        cboPermisos.setColorMaterial(new java.awt.Color(0, 153, 255));
+        cboRoles.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Técnico", "Cajero", "Administrador", "Solo Lectura" }));
+        cboRoles.setColorMaterial(new java.awt.Color(0, 153, 255));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -330,7 +310,6 @@ public class AltaUsuarios extends javax.swing.JDialog {
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,12 +318,7 @@ public class AltaUsuarios extends javax.swing.JDialog {
                             .addComponent(txtDni, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(radioSi, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(radioNo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(cboPermisos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(cboRoles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -376,18 +350,12 @@ public class AltaUsuarios extends javax.swing.JDialog {
                     .addComponent(txtRepiteContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioSi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8)
-                    .addComponent(radioNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
+                        .addGap(8, 8, 8)
                         .addComponent(jLabel9))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(cboPermisos, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                    .addComponent(cboRoles, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -453,23 +421,19 @@ public class AltaUsuarios extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAceptar;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnCancelar;
-    private RSMaterialComponent.RSComboBoxMaterial cboPermisos;
-    private javax.swing.ButtonGroup grupoTecnico;
+    private RSMaterialComponent.RSComboBoxMaterial cboRoles;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private RSMaterialComponent.RSButtonIconOne rSButtonIconOne1;
     private RSMaterialComponent.RSLabelTextIcon rSLabelTextIcon1;
-    private RSMaterialComponent.RSRadioButtonMaterial radioNo;
-    private RSMaterialComponent.RSRadioButtonMaterial radioSi;
     private RSMaterialComponent.RSTextFieldMaterial txtApellido;
     private RSMaterialComponent.RSPasswordMaterial txtContraseña;
     private RSMaterialComponent.RSTextFieldMaterial txtDni;

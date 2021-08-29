@@ -3,37 +3,73 @@ package com.ybc.orden.views;
 import com.ybc.orden.entities.EstadoOrden;
 import com.ybc.orden.entities.Orden;
 import com.ybc.orden.repositories.EstadoOrdenRepository;
-import com.ybc.orden.repositories.OrdenRepository;
-import com.ybc.orden.services.EstadoOrdenServiceImpl;
 import com.ybc.orden.services.OrdenServiceImpl;
 import static com.ybc.orden.views.MainFrame.idOrdenes;
-import java.util.Calendar;
+import static com.ybc.orden.views.MainFrame.tablaOrdenes;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import javax.annotation.PostConstruct;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ * @author matiasrh84
+ */
 @Component
-public class Estado extends javax.swing.JDialog {
+public class Trazabilidad extends javax.swing.JDialog {
 
     int x;
     int y;
-
-    @Autowired
-    private OrdenRepository ordenRepository;
-    @Autowired
-    private EstadoOrdenServiceImpl estadoOrdenService;
+    DefaultTableModel modelOrdenes;
+    SimpleDateFormat dateFormat;
     @Autowired
     private EstadoOrdenRepository estadoOrdenRepository;
     @Autowired
     private OrdenServiceImpl ordenServiceImpl;
 
-    public Estado() {
+    public Trazabilidad() {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    }
+    
+    @PostConstruct
+    void cargarTablaEstadoOrdenes() {
+        if(idOrdenes!=0){
+        modelOrdenes = (DefaultTableModel) tablaOrdenes.getModel();
+        Orden orden = ordenServiceImpl.findById(idOrdenes).get();
+        List<EstadoOrden> datosOrdenes = StreamSupport
+                    .stream(estadoOrdenRepository.findByOrden(orden).spliterator(), false)
+                    .collect(Collectors.toList());
+        modelOrdenes.setNumRows(0);
+
+        for (EstadoOrden datos : datosOrdenes) {
+            Object[] fila = {datos.getOrden().getId(), datos.getEstado() ,dateFormat.format(datos.getFecha()), datos.getOrden().getId(), datos.getObservacion()};
+            modelOrdenes.addRow(fila);
+        }
+
+        tablaOrdenes.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaOrdenes.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+        tablaOrdenes.getColumnModel().getColumn(1).setMaxWidth(90);
+        tablaOrdenes.getColumnModel().getColumn(1).setMinWidth(90);
+        tablaOrdenes.getColumnModel().getColumn(1).setPreferredWidth(90);
+        
+        tablaOrdenes.getColumnModel().getColumn(2).setMaxWidth(90);
+        tablaOrdenes.getColumnModel().getColumn(2).setMinWidth(90);
+        tablaOrdenes.getColumnModel().getColumn(2).setPreferredWidth(90);
+
+        tablaOrdenes.getColumnModel().getColumn(3).setMaxWidth(100);
+        tablaOrdenes.getColumnModel().getColumn(3).setMinWidth(100);
+        tablaOrdenes.getColumnModel().getColumn(3).setPreferredWidth(100);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -42,12 +78,10 @@ public class Estado extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        cboEstado = new RSMaterialComponent.RSComboBoxMaterial();
-        btnAceptar = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnCancelar = new RSMaterialComponent.RSButtonMaterialIconOne();
         rSButtonIconOne1 = new RSMaterialComponent.RSButtonIconOne();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txaObservacion = new javax.swing.JTextArea();
+        tablaOrdenes = new RSMaterialComponent.RSTableMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -66,26 +100,11 @@ public class Estado extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        cboEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Recibida", "En revisión", "Terminada", "Entregada", "Anulada" }));
-        cboEstado.setColorMaterial(new java.awt.Color(0, 153, 255));
-
-        btnAceptar.setBackground(new java.awt.Color(0, 153, 51));
-        btnAceptar.setText("Aceptar");
-        btnAceptar.setBackgroundHover(new java.awt.Color(0, 102, 0));
-        btnAceptar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnAceptar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CHECK_BOX);
-        btnAceptar.setRound(20);
-        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAceptarActionPerformed(evt);
-            }
-        });
-
         btnCancelar.setBackground(new java.awt.Color(255, 51, 51));
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Salir");
         btnCancelar.setBackgroundHover(new java.awt.Color(153, 0, 0));
         btnCancelar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnCancelar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CANCEL);
+        btnCancelar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.EXIT_TO_APP);
         btnCancelar.setRound(20);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,13 +124,31 @@ public class Estado extends javax.swing.JDialog {
             }
         });
 
-        txaObservacion.setBackground(new java.awt.Color(255, 255, 255));
-        txaObservacion.setColumns(20);
-        txaObservacion.setForeground(new java.awt.Color(51, 153, 255));
-        txaObservacion.setLineWrap(true);
-        txaObservacion.setRows(5);
-        txaObservacion.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jScrollPane1.setViewportView(txaObservacion);
+        tablaOrdenes.setForeground(new java.awt.Color(255, 255, 255));
+        tablaOrdenes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Estado", "Fecha", "Nº de orden", "Observación"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaOrdenes.setBackgoundHead(new java.awt.Color(0, 0, 0));
+        tablaOrdenes.setBackgoundHover(new java.awt.Color(0, 102, 255));
+        tablaOrdenes.setColorBorderHead(new java.awt.Color(204, 204, 204));
+        tablaOrdenes.setColorBorderRows(new java.awt.Color(255, 255, 255));
+        tablaOrdenes.setColorPrimaryText(new java.awt.Color(0, 102, 255));
+        tablaOrdenes.setColorSecundaryText(new java.awt.Color(0, 102, 255));
+        tablaOrdenes.setSelectionBackground(new java.awt.Color(0, 102, 255));
+        jScrollPane1.setViewportView(tablaOrdenes);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -120,16 +157,12 @@ public class Estado extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(rSButtonIconOne1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 2, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1)
-                    .addComponent(cboEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rSButtonIconOne1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCancelar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 886, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -137,14 +170,10 @@ public class Estado extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(rSButtonIconOne1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -153,8 +182,8 @@ public class Estado extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -179,70 +208,33 @@ public class Estado extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+    private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
 
-        if (txaObservacion.getText() == null || txaObservacion.getText().equals("")) {
-
-            JOptionPane.showMessageDialog(null, "Debe completar la observación");
-        } else {
-            Orden orden = ordenServiceImpl.findById(idOrdenes).get();
-            List<EstadoOrden> datosOrdenes = StreamSupport
-                    .stream(estadoOrdenRepository.findByOrden(orden).spliterator(), false)
-                    .collect(Collectors.toList());
-            
-             for (EstadoOrden datos : datosOrdenes) {                 
-                 datos.setEstadoActual(false);
-                 estadoOrdenService.save(datos);
-        }
-
-            Calendar fecha = Calendar.getInstance();
-            EstadoOrden estadoOrden = EstadoOrden.builder()                    
-                    .estado(cboEstado.getSelectedItem().toString())
-                    .observacion(txaObservacion.getText())
-                    .fecha(fecha.getTime())
-                    .orden(ordenRepository.findById(idOrdenes).get())
-                    .estadoActual(true)
-                    .build();
-            estadoOrdenService.save(estadoOrden);
-            dispose();
-            txaObservacion.setText(null);
-        }
-    }//GEN-LAST:event_btnAceptarActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-
-        dispose();
-
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void rSButtonIconOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonIconOne1ActionPerformed
-
-        dispose();
-
-    }//GEN-LAST:event_rSButtonIconOne1ActionPerformed
+        this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
+    }//GEN-LAST:event_jPanel1MouseDragged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
 
         x = evt.getX();
         y = evt.getY();
-
     }//GEN-LAST:event_jPanel1MousePressed
 
-    private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
+    private void rSButtonIconOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonIconOne1ActionPerformed
 
-        this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
+        dispose();
+    }//GEN-LAST:event_rSButtonIconOne1ActionPerformed
 
-    }//GEN-LAST:event_jPanel1MouseDragged
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
 
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private RSMaterialComponent.RSButtonMaterialIconOne btnAceptar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
-    private RSMaterialComponent.RSComboBoxMaterial cboEstado;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private RSMaterialComponent.RSButtonIconOne rSButtonIconOne1;
-    private javax.swing.JTextArea txaObservacion;
+    public static RSMaterialComponent.RSTableMetro tablaOrdenes;
     // End of variables declaration//GEN-END:variables
 }
