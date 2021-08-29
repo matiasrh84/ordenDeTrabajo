@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -22,17 +23,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class Report {
 
     @Autowired
-    JasperReport reporte;
+    JasperReport original;
+    JasperReport duplicado;
 
-    public void OrdenDeTrabajo(Orden orden) {
+    private String os = System.getProperty("os.name");
+    private String separator = System.getProperty("file.separator");
+    Path destino;
+
+    public JasperPrint OrdenDeTrabajo(Orden orden) {
         Map parametro = new HashMap();
         Image logo = new ImageIcon(getClass().getResource("/imagenes/tecnologic.png")).getImage();
-
+        JasperPrint jasperPrint = null;
         try {
-
-            Path destino = Paths.get("ordenDeTrabajo/Reportes/");
-
-            reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reportes/OrdenDeTrabajo.jasper"));
+            original = (JasperReport) JRLoader.loadObject(getClass().getResource("/reportes/OrdenDeTrabajo.jasper"));
             parametro.put("idOrden", orden.getId());
             parametro.put("fecha", orden.getEntrada());
             parametro.put("nombreCliente", orden.getEquipo().getCliente().getNombre() + " " + orden.getEquipo().getCliente().getApellido());
@@ -51,24 +54,21 @@ public class Report {
             parametro.put("tecnico", orden.getUsuario().getNombre() + " " + orden.getUsuario().getApellido());
             parametro.put("contacto", orden.getEquipo().getCliente().getContacto());
             parametro.put("logo", logo);
+            jasperPrint = JasperFillManager.fillReport(original, parametro, new JREmptyDataSource());
 
-            System.out.println(parametro);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parametro, new JREmptyDataSource());
-            JasperExportManager.exportReportToPdfFile(jasperPrint, destino.toString() + "/" + orden.getId() + "-original.pdf");
-            JasperPrintManager.printReport(jasperPrint,true);
         } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return jasperPrint;
     }
 
-    public void OrdenDeTrabajoDuplicado(Orden orden) {
+    public JasperPrint OrdenDeTrabajoDuplicado(Orden orden) {
         Map parametro = new HashMap();
         Image logo = new ImageIcon(getClass().getResource("/imagenes/tecnologic.png")).getImage();
-        try {
-
-            Path destino = Paths.get("ordenDeTrabajo/Reportes/");
-
-            reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reportes/OrdenDeTrabajoDuplicado.jasper"));
+        JasperPrint jasperPrint = null;
+        try {          
+            duplicado = (JasperReport) JRLoader.loadObject(getClass().getResource("/reportes/OrdenDeTrabajoDuplicado.jasper"));
             parametro.put("idOrden", orden.getId());
             parametro.put("fecha", orden.getEntrada());
             parametro.put("nombreCliente", orden.getEquipo().getCliente().getNombre() + " " + orden.getEquipo().getCliente().getApellido());
@@ -90,13 +90,31 @@ public class Report {
             parametro.put("diagnostico", orden.getDiagnostico());
             parametro.put("solucion", orden.getSolucion());
             parametro.put("logo", logo);
+            jasperPrint = JasperFillManager.fillReport(duplicado, parametro, new JREmptyDataSource());            
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return jasperPrint;
+    }
 
-            System.out.println(parametro);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parametro, new JREmptyDataSource());
-            JasperExportManager.exportReportToPdfFile(jasperPrint, destino.toString() + "/" + orden.getId() + "-duplicado.pdf");
-            JasperPrintManager.printReport(jasperPrint,true);
+    public void imprimirReportes(JasperPrint original, JasperPrint duplicado, Orden orden) {
+
+        if (os.equals("Linux")) {
+            destino = Paths.get("/ordenDeTrabajo/Reportes/");
+        } else {
+            destino = Paths.get("C:" + separator + "Ybgestor" + separator + "Reportes" + separator);
+        }
+
+        try {
+            JasperExportManager.exportReportToPdfFile(original, destino.toString() + separator + orden.getId() + " -original.pdf ");
+            JasperPrintManager.printReport(original, true);
+            JasperExportManager.exportReportToPdfFile(duplicado, destino.toString() + separator + orden.getId() + "-duplicado.pdf");
+            JasperPrintManager.printReport(duplicado, true);
+            
         } catch (JRException ex) {
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 }

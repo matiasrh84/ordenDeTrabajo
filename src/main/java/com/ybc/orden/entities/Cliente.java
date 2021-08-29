@@ -11,8 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Entity
 @Table
 @Data
@@ -32,11 +30,19 @@ public class Cliente implements Serializable {
     private String email;
     private String condicionIva;
     private String contacto;
+    private boolean estado;
     
 
     @Override
     public String toString() {
 
         return apellido + ", " + nombre;
+    }
+    
+    public String getEstado() {
+        if(estado)
+            return "Activo";
+        else
+            return "Inactivo";
     }
 }

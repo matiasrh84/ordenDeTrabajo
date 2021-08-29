@@ -29,6 +29,7 @@ public class Equipo implements Serializable {
     private String marca;
     private String numeroSerie;
     private String modelo;
+    private boolean estado;
     
     @OneToOne    
     @JoinColumn(name = "cliente_id")
@@ -36,8 +37,14 @@ public class Equipo implements Serializable {
     
     @Override public String toString() {
      
-        return marca + " - " + modelo + " - " + cliente.getApellido().toUpperCase() + ", " + cliente.getNombre().toUpperCase();
+        return marca + " - " + modelo;
     }
     
+    public String getEstado() {
+        if(estado)
+            return "Activo";
+        else
+            return "Inactivo";
+    }
     
 }

@@ -30,11 +30,20 @@ public class Usuario implements Serializable {
     private String usuario;
     private String clave;
     private boolean tecnico;
+    private int permisos;
+    private boolean estado;
     
     
     @Override public String toString() {
      
         return apellido+", "+nombre;
-    } 
+    }
+    public String getEstado() {
+        String sEstado ="Inactivo";
+        if(estado) {
+            sEstado="Activo";
+        }
+        return sEstado;
+    }
     
 }

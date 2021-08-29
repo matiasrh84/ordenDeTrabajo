@@ -26,7 +26,9 @@ public class EstadoOrden implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String estado;   
+    private String estado;
+    private String observacion;
+    private boolean estadoActual;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fecha;
    @OneToOne

@@ -4,18 +4,15 @@ import com.ybc.orden.entities.Cliente;
 import com.ybc.orden.entities.Equipo;
 import com.ybc.orden.services.ClienteServiceImpl;
 import com.ybc.orden.services.EquipoServiceImpl;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import static com.ybc.orden.views.AltaOrdenes.idCliente;
 import javax.annotation.PostConstruct;
 import javax.swing.JOptionPane;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AltaEquipos extends javax.swing.JDialog {
-    
+
     int x;
     int y;
 
@@ -23,8 +20,6 @@ public class AltaEquipos extends javax.swing.JDialog {
     private ClienteServiceImpl clienteService;
     @Autowired
     private EquipoServiceImpl equipoService;
-    @Autowired
-    private AltaClientes abmClientes;
 
     public AltaEquipos() {
         initComponents();
@@ -35,34 +30,30 @@ public class AltaEquipos extends javax.swing.JDialog {
 
     @PostConstruct
     void cargarClientes() {
-        abmClientes.setModal(true);
-        List<Cliente> datosClientes = StreamSupport
-                .stream(clienteService.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-        cboCliente.removeAllItems();
-        for (Cliente cliente : datosClientes) {
-            cboCliente.addItem(cliente);
+
+        if (idCliente != 0) {
+            Cliente cliente = clienteService.findById(idCliente).get();
+            lblCliente.setText(cliente.toString());
         }
-        AutoCompleteDecorator.decorate(cboCliente);
-        
     }
-    
+
     void aplicarCambios() {
         String tipo;
         if (cboTipo.getSelectedItem().equals("Otros")) {
             tipo = txtTipo.getText();
         } else {
-            tipo = cboTipo.getSelectedItem().toString();            
+            tipo = cboTipo.getSelectedItem().toString();
         }
         Equipo equipo = Equipo.builder()
-                .cliente((Cliente) cboCliente.getSelectedItem())
+                .cliente(clienteService.findById(idCliente).get())
                 .tipo(tipo)
                 .marca(txtMarca.getText())
                 .modelo(txtModelo.getText())
                 .numeroSerie(txtSerie.getText())
+                .estado(true)
                 .build();
 
-        cboCliente.setSelectedIndex(0);
+        lblCliente.setText("");
         cboTipo.setSelectedIndex(0);
         txtMarca.setText(null);
         txtModelo.setText(null);
@@ -73,7 +64,6 @@ public class AltaEquipos extends javax.swing.JDialog {
         equipoService.save(equipo);
         dispose();
     }
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -96,8 +86,7 @@ public class AltaEquipos extends javax.swing.JDialog {
         btnCancelar = new RSMaterialComponent.RSButtonMaterialIconTwo();
         cboTipo = new RSMaterialComponent.RSComboBoxMaterial();
         jLabel3 = new javax.swing.JLabel();
-        cboCliente = new RSMaterialComponent.RSComboBoxMaterial();
-        btnAltaCliente = new RSMaterialComponent.RSButtonMaterialIconTwo();
+        lblCliente = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -233,7 +222,7 @@ public class AltaEquipos extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -248,6 +237,7 @@ public class AltaEquipos extends javax.swing.JDialog {
         );
 
         cboTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CPU", "Impresora", "Monitor", "Notebook", "Otros" }));
+        cboTipo.setColorMaterial(new java.awt.Color(51, 153, 255));
         cboTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboTipoActionPerformed(evt);
@@ -257,20 +247,8 @@ public class AltaEquipos extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         jLabel3.setText("Tipo:");
 
-        cboCliente.setColorMaterial(new java.awt.Color(0, 153, 255));
-
-        btnAltaCliente.setBackground(new java.awt.Color(0, 153, 51));
-        btnAltaCliente.setText("Alta cliente");
-        btnAltaCliente.setBackgroundHover(new java.awt.Color(0, 102, 0));
-        btnAltaCliente.setFont(new java.awt.Font("Roboto Bold", 1, 12)); // NOI18N
-        btnAltaCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnAltaCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
-        btnAltaCliente.setRound(10);
-        btnAltaCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAltaClienteActionPerformed(evt);
-            }
-        });
+        lblCliente.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        lblCliente.setForeground(new java.awt.Color(153, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -298,14 +276,11 @@ public class AltaEquipos extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cboCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(24, 24, 24)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(lblCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btnAltaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 56, Short.MAX_VALUE))))))
+                                        .addComponent(cboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(24, 24, 24)
+                                        .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(11, 11, 11)
@@ -315,17 +290,16 @@ public class AltaEquipos extends javax.swing.JDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cboCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnAltaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
@@ -342,7 +316,7 @@ public class AltaEquipos extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -362,7 +336,7 @@ public class AltaEquipos extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
 
-        if(!txtMarca.getText().equals("") && !txtModelo.getText().equals("")) {
+        if (!txtMarca.getText().equals("") && !txtModelo.getText().equals("")) {
             aplicarCambios();
         } else {
             JOptionPane.showMessageDialog(null, "Debe completar los campos obligatorios");
@@ -394,32 +368,23 @@ public class AltaEquipos extends javax.swing.JDialog {
 
     }//GEN-LAST:event_cboTipoActionPerformed
 
-    private void btnAltaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaClienteActionPerformed
-
-        abmClientes.setVisible(true);
-        cargarClientes();
-        
-    }//GEN-LAST:event_btnAltaClienteActionPerformed
-
     private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
-        
+
         x = evt.getX();
         y = evt.getY();
-        
+
     }//GEN-LAST:event_jPanel2MousePressed
 
     private void jPanel2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseDragged
 
         this.setLocation(this.getLocation().x + evt.getX() - x, this.getLocation().y + evt.getY() - y);
-        
+
     }//GEN-LAST:event_jPanel2MouseDragged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconTwo btnAceptar;
-    private RSMaterialComponent.RSButtonMaterialIconTwo btnAltaCliente;
     private RSMaterialComponent.RSButtonMaterialIconTwo btnCancelar;
-    private RSMaterialComponent.RSComboBoxMaterial cboCliente;
     private RSMaterialComponent.RSComboBoxMaterial cboTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -429,6 +394,7 @@ public class AltaEquipos extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblCliente;
     private RSMaterialComponent.RSButtonIconOne rSButtonIconOne1;
     private RSMaterialComponent.RSLabelTextIcon rSLabelTextIcon1;
     private RSMaterialComponent.RSTextFieldMaterial txtMarca;
